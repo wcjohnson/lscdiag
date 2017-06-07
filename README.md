@@ -13,4 +13,11 @@ Features:
 - Deep permalinks, including UI state and selections
 - Selectable compiler versions, including experimental versions
 
+Building:
+
+- `npm install`
+- `npm install` in each of the `compilers/*` directories (no automated build step for this yet, sorry!)
+- `npm start` for live development
+- `npm run build` to generate a static build
+
 >This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
