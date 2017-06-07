@@ -32,7 +32,6 @@ ConfigInput = compose(
         </RadioGroup>
       </CardText>
     </Card>
-    {JSON.stringify(props.config)}
   </div>
 )
 
