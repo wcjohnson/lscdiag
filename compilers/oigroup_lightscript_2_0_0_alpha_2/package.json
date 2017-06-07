@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@oigroup/babel-plugin-lightscript": "2.0.0-alpha.2",
+    "@oigroup/babylon-lightscript": "2.0.0-alpha.2"
+  }
+}

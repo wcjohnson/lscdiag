@@ -16,10 +16,18 @@ addCompiler(
   require("./oigroup_lightscript_1_0_4/compiler.js")
 );
 addCompiler(
+  "oigroup@1.1.0",
+  require("./oigroup_lightscript_1_1_0/compiler.js")
+);
+addCompiler(
   "oigroup@2.0.0-alpha.1",
   require("./oigroup_lightscript_2_0_0_alpha_1/compiler.js")
 );
+addCompiler(
+  "oigroup@2.0.0-alpha.2",
+  require("./oigroup_lightscript_2_0_0_alpha_2/compiler.js")
+);
 
-compilers["latest"] = compilers["oigroup@1.0.4"]
+compilers["latest"] = compilers["oigroup@1.1.0"]
 
 module.exports = compilers;
