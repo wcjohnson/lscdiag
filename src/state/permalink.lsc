@@ -1,0 +1,55 @@
+import base64url from 'base64-url'
+import pako from 'pako'
+import url from 'url'
+
+import tree from '.'
+
+export createPermalink(state, origUrl) ->
+  deflated = pako.deflate(JSON.stringify(state), { to: 'string'})
+  stateArg = base64url.encode(deflated)
+
+  parsed = url.parse(origUrl)
+  delete parsed.search
+  parsed.query = {
+    v: 1
+    s: stateArg
+  }
+
+  newUrl = url.format(parsed)
+
+  newUrl
+
+resolveVersion = {
+  '1': (compressed) ->
+    let resolved, deflated, stringified
+    try:
+      now deflated = base64url.decode(compressed)
+      now stringified = pako.inflate(deflated, { to: 'string'})
+      now resolved = JSON.parse(stringified)
+    catch e:
+      null
+
+    resolved
+}
+
+reallyResolvePermalink(history, version, state) ->
+  // First discard the query string
+  history.replace("/")
+
+  resolver = if version: resolveVersion[version]
+  if not resolver:
+    console.debug("invalid permalink version")
+    return
+
+  resolved = resolver(state)
+  if not resolved:
+    console.debug("garbled permalink data")
+    return
+
+  // Discard existing fixtures
+  tree.fixtures.splice(0, tree.fixtures.length)
+  // Reload new state
+  tree.store.dispatch({type: 'RESET_APP_STATE', payload: resolved})
+
+export resolvePermalink(history, version, state) ->
+  setTimeout(-> reallyResolvePermalink(history, version, state), 0)

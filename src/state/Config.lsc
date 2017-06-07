@@ -1,0 +1,20 @@
+// Compilation configuration state
+import { ReduxComponent, action, selector } from 'redux-components'
+{ assign } = Object
+
+initialState = { compiler: 'latest' }
+
+export default class Config extends ReduxComponent:
+  static verbs = ['SET_COMPILER']
+
+  reducer(state = initialState, action) ->
+    match action.type:
+      | this.SET_COMPILER: ({}~assign(state, { compiler: action.payload }))
+      | else: state
+
+  @action({isDispatcher: true})
+  setCompiler(value) ->
+    ({ type: this.SET_COMPILER, payload: value })
+
+  @selector({isObservable: true})
+  get(state) -> state

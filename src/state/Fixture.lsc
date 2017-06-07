@@ -1,0 +1,26 @@
+import { ReduxComponent, withSubtree } from 'redux-components'
+import ComponentList from 'redux-components-list'
+
+import Source from './Source'
+import UI from './UI'
+import Config from './Config'
+import compiled$ from './compiled$'
+import parsed$ from './parsed$'
+import markers$ from './markers$'
+
+Fixture = withSubtree(-> ({
+  source: Source
+  ui: UI
+  config: Config
+}))(class extends ReduxComponent:
+  componentWillMount() ->
+    // Construct observables corresponding to this fixture.
+    this.compiled$ = compiled$(this)
+    this.parsed$ = parsed$(this)
+    Object.assign(this, markers$(this))
+)
+
+Fixtures = ComponentList(-> Fixture)
+export fixtures = new Fixtures
+
+export default Fixture

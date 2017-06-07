@@ -1,0 +1,10 @@
+export default createMarker(style, startLoc, endLoc) ->
+  if not endLoc: now endLoc = { line: startLoc.line, column: startLoc.column + 1 }
+  {
+    startRow: startLoc.line - 1
+    startCol: startLoc.column
+    endRow: endLoc.line - 1
+    endCol: endLoc.column
+    type: "text"
+    className: style
+  }

@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@oigroup/babel-plugin-lightscript": "1.0.4",
+    "@oigroup/babylon-lightscript": "1.0.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-standalone": "^6.24.2"
+  }
+}

@@ -1,0 +1,27 @@
+import url from 'url'
+import React, { Component } from 'react'
+import './App.css'
+import 'react-mdl/extra/material.css'
+import 'react-mdl/extra/material.js'
+import Main from './Main'
+
+import {
+  BrowserRouter as Router,
+  Route
+} from 'react-router-dom'
+
+// compute base pathname
+publicUrl = process.env.PUBLIC_URL or '/'
+let path = url.parse(publicUrl).pathname
+// trim trailing /
+if path != '/' and path.endsWith('/'):
+  now path = path.substr(0, path.length - 1);
+
+// ensure state initializes before we try to render.
+import tree from './state'
+
+export default class App extends Component:
+  render() ->
+    return <Router basename={path}>
+      <Route exact path="/" component={Main}/>
+    </Router>

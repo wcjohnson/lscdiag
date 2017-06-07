@@ -1,0 +1,34 @@
+import React from 'react'
+import createMarker from '../utils/createMarker'
+
+// HACK: can't load Ace during ssr
+let AceEditor = -> null
+if typeof window != 'undefined' and window:
+  now AceEditor = require('./AceEditor').default
+  require('brace')
+  require('brace/mode/jsx')
+  require('../utils/braceLscMode')
+  require('brace/theme/chrome')
+
+export CodeEditor({code, syntax, readOnly, numLines, markers, name, onChange}) ->
+  if not code: now code = ''
+
+  now numLines = Math.max(numLines or code.split("\n").length or 1, 5)
+
+  <AceEditor
+    mode={syntax}
+    theme="chrome"
+    value={code}
+    height='100%'
+    width='100%'
+    minLines={numLines}
+    maxLines={numLines}
+    tabSize={2}
+    readOnly={readOnly}
+    name={name}
+    markers={markers}
+    highlightActiveLine
+    onChange={onChange}
+  />
+
+export { createMarker }

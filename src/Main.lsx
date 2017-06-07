@@ -1,0 +1,63 @@
+import React from "react"
+import Modal from "react-modal"
+import { Layout, Header, Content, Navigation } from "react-mdl/lib/Layout"
+import { Grid, Cell } from "react-mdl/lib/Grid"
+
+import compose from 'recompose/compose'
+import pure from 'recompose/pure'
+import withState from 'recompose/withState'
+import withPropsOnChange from 'recompose/withPropsOnChange'
+import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
+import withConstHandlers from 'hawks/lib/withConstHandlers'
+
+import { fixtures } from './state/Fixture'
+import { resolvePermalink } from './state/permalink'
+
+import CodePanel from './components/CodePanel'
+import OutputPanel from './components/OutputPanel'
+import Permalink from './components/Permalink'
+
+import querystring from 'querystring'
+
+Main = compose(
+  pure
+  withState('dialogOpen', 'setDialogOpen', false)
+  withPropsFromObservables( -> ({
+    fixtures: fixtures.toArray
+  }))
+  withPropsOnChange(['location'], (props) ->
+    loc = props.location
+    if loc.search:
+      parsed = querystring.parse(loc.search.substr(1))
+      if parsed.v and parsed.s:
+        resolvePermalink(props.history, parsed.v, parsed.s)
+    {}
+  )
+  withConstHandlers({
+    addFixture: -> fixtures.push(true)
+    openDialog: (props) -> props.setDialogOpen(true)
+    closeDialog: (props) -> props.setDialogOpen(false)
+  })
+)(Main(props) ->
+  stuff = []
+  for idx i, elem fixture in props.fixtures:
+    stuff.push(<Cell key={`${i}.1`} col={6}><CodePanel fixture={fixture}/></Cell>)
+    stuff.push(<Cell key={`${i}.2`} col={6}><OutputPanel fixture={fixture}/></Cell>)
+
+  <Layout fixedHeader>
+    <Header title="lscdiag">
+      <Navigation>
+        <a href="#" onClick={props.addFixture}>Add Fixture</a>
+        <a href="#" onClick={props.openDialog}>Permalink</a>
+      </Navigation>
+    </Header>
+    <Content>
+      <Grid>{stuff}</Grid>
+      <Modal isOpen={props.dialogOpen} onRequestClose={props.closeDialog} contentLabel="permalink">
+        <Permalink onClose={props.closeDialog} />
+      </Modal>
+    </Content>
+  </Layout>
+)
+
+export default Main

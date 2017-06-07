@@ -1,0 +1,35 @@
+import React from 'react'
+import cx from 'classnames'
+import { describeNode } from '../utils/traverse'
+
+export AstEntry({indentLevel, description, onActivateNode, isActive, isWarning, nodeKey, nodeProps}) ->
+  paddingLeft = `${indentLevel}em`
+  <li style={{paddingLeft}} onClick={onActivateNode} className={cx({warning: isWarning, active: isActive})}>
+    <div>
+      <span className="nodekey">{nodeKey}</span> <strong>{description}</strong>
+    </div>
+    {if isActive: nodeProps}
+  </li>
+
+export AstProps({node}) ->
+  <div>
+    {[for key k, val v in node:
+        if v != null and (not v.type) and (not Array.isArray(v)):
+          <div key={k}><strong>{k}</strong> {JSON.stringify(v)}</div>
+    ]}
+  </div>
+
+export entryForNode(node, isActive, onActivateNode) ->
+  { index, key, idx, indentLevel } = node
+  nodeKey = if index != undefined: `${key}[${index}]` else: key
+  values = if isActive: <AstProps node={node.node} />
+
+  {
+    sourceLoc: node.node.loc
+    component: <AstEntry
+      key={idx} indentLevel={indentLevel}
+      isActive={isActive} nodeKey={nodeKey} description={describeNode(node.node)}
+      nodeProps={values}
+      onActivateNode={-> onActivateNode(idx)}
+    />
+  }

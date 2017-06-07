@@ -1,0 +1,10 @@
+import React from 'react'
+
+export default LOC({code}) ->
+  lines = if code: code.split('\n').length
+  chars = if code: code.length
+
+   if lines and chars:
+     <div>{lines} LOC, {chars} chars</div>
+   else:
+     <div />

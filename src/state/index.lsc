@@ -1,0 +1,27 @@
+import { createStore } from 'redux'
+import { mountRootComponent, withSubtree, ReduxComponent, selector } from 'redux-components'
+import { fixtures } from './Fixture'
+
+Tree = withSubtree(-> ({fixtures}))(
+  class Tree extends ReduxComponent:
+    reducer(state, action) ->
+      match action.type:
+        | 'RESET_APP_STATE': action.payload
+        | else: state
+
+    @selector({isObservable: true})
+    get(state) -> state
+)
+
+tree = new Tree
+
+export store = if typeof window != 'undefined' and window:
+  createStore( x -> x, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() )
+else:
+  createStore( x -> x)
+
+mountRootComponent(store, tree)
+
+fixtures.push(true)
+
+export default tree

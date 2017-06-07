@@ -1,0 +1,48 @@
+import React from 'react'
+import { Tabs, Tab } from 'react-mdl/lib/Tabs'
+
+import compose from 'recompose/compose'
+import pure from 'recompose/pure'
+import branch from 'recompose/branch'
+import renderComponent from 'recompose/renderComponent'
+import withConstHandlers from 'hawks/lib/withConstHandlers'
+import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
+
+import TranspiledOutput from './TranspiledOutput'
+import AstOutput from './AstOutput'
+
+NYI() -> <div>NYI</div>
+
+componentForTab = [
+  TranspiledOutput
+  AstOutput
+]
+
+OutputPanel = compose(
+  pure
+  branch(props -> !props.fixture, renderComponent(-> <div />))
+  withPropsFromObservables((props) -> ({
+    activeTab: props.fixture.ui.getRightTab
+  }))
+  withConstHandlers({
+    setActiveTab(props, tabIndex) ->
+      props.fixture.ui.setRightTab(tabIndex)
+  })
+)(OutputPanel(props) ->
+  Subcomponent = componentForTab[props.activeTab]
+  <div>
+    <Tabs
+      activeTab={props.activeTab}
+      onChange={props.setActiveTab}
+      ripple
+    >
+      <Tab>Transpiled</Tab>
+      <Tab>Ast</Tab>
+    </Tabs>
+    <section>
+      <Subcomponent fixture={props.fixture} />
+    </section>
+  </div>
+)
+
+export default OutputPanel

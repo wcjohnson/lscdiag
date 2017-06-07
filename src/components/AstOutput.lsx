@@ -1,0 +1,63 @@
+import React from 'react'
+
+import compose from 'recompose/compose'
+import pure from 'recompose/pure'
+import withConstHandlers from 'hawks/lib/withConstHandlers'
+import withPropsOnChange from 'recompose/withPropsOnChange'
+import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
+
+import map from 'observable-utils/lib/map'
+import combineLatest from 'observable-utils/lib/combineLatest'
+
+import { createMarker } from './CodeEditor'
+import { buildFlatTree } from '../utils/traverse'
+import { entryForNode } from './AstEntry'
+
+AstOutput = compose(
+  pure
+  withConstHandlers({
+    setActiveNode: (props, x) -> props.fixture.ui.setSelectedNode(x)
+  })
+  withPropsOnChange(['fixture'], (props) ->
+    data$ =
+      combineLatest([props.fixture.parsed$, props.fixture.ui.getSelectedNode])
+      ~map(([parsed, activeNode]) ->
+        let entries, errorMessage
+
+        if parsed.ast?.program:
+          // Build react components for ast entries
+          now entries = buildFlatTree(
+            parsed.ast.program
+            activeNode
+            (node) -> entryForNode(node, node.idx == activeNode, props.setActiveNode)
+          )
+          // Generate marker for active node
+          activeEntry = entries[activeNode]
+          if activeEntry and activeEntry.sourceLoc:
+            props.fixture.otherMarkers$.next([
+              createMarker("hlt_active", activeEntry.sourceLoc.start, activeEntry.sourceLoc.end)
+            ])
+        else:
+          now errorMessage = parsed.errorMessage or "Unknown error."
+
+        { entries, errorMessage }
+      )
+    { data$ }
+  )
+  withPropsFromObservables((props) -> ({ data: props.data$ }))
+)((props) ->
+  <div>
+    {if props.data?.errorMessage:
+      <pre>
+        {props.data.errorMessage}
+      </pre>
+    }
+    {if props.data?.entries:
+      <ol>
+        {[for elem entry in props.data.entries: entry.component]}
+      </ol>
+    }
+  </div>
+)
+
+export default AstOutput

@@ -1,0 +1,33 @@
+import React from 'react'
+
+import pure from 'recompose/pure'
+import compose from 'recompose/compose'
+import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
+
+import { CodeEditor } from './CodeEditor'
+import LOC from './LOC'
+
+enhance = compose(
+  pure
+  withPropsFromObservables((props) ->
+    ({
+      compiled: props.fixture.compiled$
+    })
+  )
+)
+
+TranspiledOutput = enhance(TranspiledOutput(props) ->
+  code = props.compiled?.js or props.compiled?.errorMessage
+
+  <div>
+    <LOC code={code} />
+    <CodeEditor
+      name="js"
+      code={code}
+      syntax="jsx"
+      readOnly
+    />
+  </div>
+)
+
+export default TranspiledOutput
