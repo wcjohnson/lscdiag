@@ -24,10 +24,10 @@ Permalink = compose(
   })
 )((props) ->
   <div>
-    <Textfield value={props.link} onChange={->} label="Link" rows={10} style={{width: '100%'}}/>
+    <Textfield value={props.link} onChange={-> return} label="Link" rows={10} style={{width: '100%'}}/>
     <div>({props.link.length} characters)</div>
     { if props.link.length > 2000:
-      <strong>WARNING! URLs longer than 2000 characters won't work on some browsers!</strong>
+      <strong>WARNING! URLs longer than 2000 characters won&apos;t work on some browsers!</strong>
     }
     <Button raised colored ripple onClick={props.onCopy}>Copy to Clipboard</Button>
     <Button style={{marginLeft: 5}} raised colored ripple onClick={props.onClose}>Close</Button>
