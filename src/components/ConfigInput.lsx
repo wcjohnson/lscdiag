@@ -2,6 +2,8 @@ import React from "react"
 
 import RadioGroup from 'react-mdl/lib/RadioGroup'
 import Radio from 'react-mdl/lib/Radio'
+import CheckGroup from './CheckGroup'
+import Checkbox from 'react-mdl/lib/Checkbox'
 import { Card, CardTitle, CardText } from 'react-mdl/lib/Card'
 
 import compose from 'recompose/compose'
@@ -10,6 +12,7 @@ import withConstHandlers from 'hawks/lib/withConstHandlers'
 import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
 import compilers from '../utils/compilers'
+import plugins from '../utils/plugins'
 
 ConfigInput = compose(
   pure
@@ -19,6 +22,9 @@ ConfigInput = compose(
   withConstHandlers({
     setCompiler(props, e) ->
       props.fixture.config.setCompiler(e.target.value)
+
+    setPlugins(props, plugins) ->
+      props.fixture.config.setPlugins(plugins)
   })
 )((props) ->
   <div>
@@ -30,6 +36,16 @@ ConfigInput = compose(
             <Radio key={id} value={id} ripple>{id}</Radio>
           ]}
         </RadioGroup>
+      </CardText>
+    </Card>
+    <Card shadow={0}>
+      <CardTitle>Plugins</CardTitle>
+      <CardText>
+        <CheckGroup value={props.config.plugins} onChange={props.setPlugins}>
+          {[for key id in plugins:
+            <Checkbox key={id} label={id} value={id} ripple />
+          ]}
+        </CheckGroup>
       </CardText>
     </Card>
   </div>

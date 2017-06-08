@@ -1,0 +1,9 @@
+import plugins from './plugins'
+
+export default getCompilerOptions(config) ->
+  {
+    plugins: [
+      for elem plugin in (config.plugins or []):
+        if plugins[plugin]: plugins[plugin]
+    ]
+  }

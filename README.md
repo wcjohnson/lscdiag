@@ -12,11 +12,12 @@ Features:
 - AST visualization
 - Deep permalinks, including UI state and selections
 - Selectable compiler versions, including experimental versions
+- Selectable Babel plugins
 
 Building:
 
 - `npm install`
-- `npm install` in each of the `compilers/*` directories (no automated build step for this yet, sorry!)
+- `npm install` in each of the `compilers/*` directories, as well as the `plugins/` directory (no automated build step for this yet, sorry!)
 - `npm start` for live development
 - `npm run build` to generate a static build
 
