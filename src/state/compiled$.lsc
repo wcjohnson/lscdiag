@@ -10,12 +10,13 @@ export default compiled$(fixture) ->
   combineLatest$([fixture.source.code, fixture.config.get])
   ~map$(([source, config]) ->
     compiler = compilers[config.compiler]
-    opts = getCompilerOptions(config)
     if not compiler: return {
       lsc: ''
       errorMessage: 'Invalid compiler setting'
       errorMarker: null
     }
+
+    opts = compiler~getCompilerOptions(config)
     result = compiler.compile(source, opts)
     // Push compilation errors to UI
     if result.errorMarker:

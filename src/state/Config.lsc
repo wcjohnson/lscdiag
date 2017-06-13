@@ -5,11 +5,12 @@ import { ReduxComponent, action, selector } from 'redux-components'
 initialState = { compiler: 'latest' }
 
 export default class Config extends ReduxComponent:
-  static verbs = ['SET_COMPILER', 'SET_PLUGINS']
+  static verbs = ['SET_COMPILER', 'SET_FEATURES', 'SET_PLUGINS']
 
   reducer(state = initialState, action) ->
     match action.type:
       | == this.SET_COMPILER: ({}~assign(state, { compiler: action.payload }))
+      | == this.SET_FEATURES: ({}~assign(state, { features: action.payload }))
       | == this.SET_PLUGINS: ({}~assign(state, { plugins: action.payload }))
       | else: state
 
@@ -20,6 +21,10 @@ export default class Config extends ReduxComponent:
   @action({isDispatcher: true})
   setPlugins(value) ->
     ({ type: this.SET_PLUGINS, payload: value })
+
+  @action({isDispatcher: true})
+  setFeatures(value) ->
+    ({ type: this.SET_FEATURES, payload: value })
 
   @selector({isObservable: true})
   get(state) -> state

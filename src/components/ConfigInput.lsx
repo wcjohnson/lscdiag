@@ -5,6 +5,7 @@ import Radio from 'react-mdl/lib/Radio'
 import CheckGroup from './CheckGroup'
 import Checkbox from 'react-mdl/lib/Checkbox'
 import { Card, CardTitle, CardText } from 'react-mdl/lib/Card'
+import { Grid, Cell } from "react-mdl/lib/Grid"
 
 import compose from 'recompose/compose'
 import pure from 'recompose/pure'
@@ -13,6 +14,30 @@ import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
 import compilers from '../utils/compilers'
 import plugins from '../utils/plugins'
+
+CompilerSelector({value, onChange}) ->
+  <RadioGroup container="div" childContainer="div" name="compiler" value={value} onChange={onChange}>
+    {[for key id in compilers:
+      <Radio key={id} value={id} ripple>{id}</Radio>
+    ]}
+  </RadioGroup>
+
+FeatureSelector({compiler, value, onChange}) ->
+  if compiler?.metadata?.features:
+    <CheckGroup value={value} onChange={onChange}>
+      {[for key id in compiler.metadata.features:
+        <Checkbox key={id} label={id} value={id} ripple />
+      ]}
+    </CheckGroup>
+  else:
+    <div>Selected compiler does not export metadata.</div>
+
+PluginSelector({value, onChange}) ->
+  <CheckGroup value={value} onChange={onChange}>
+    {[for key id in plugins:
+      <Checkbox key={id} label={id} value={id} ripple />
+    ]}
+  </CheckGroup>
 
 ConfigInput = compose(
   pure
@@ -25,29 +50,38 @@ ConfigInput = compose(
 
     setPlugins(props, plugins) ->
       props.fixture.config.setPlugins(plugins)
+
+    setFeatures(props, features) ->
+      props.fixture.config.setFeatures(features)
   })
 )((props) ->
   <div>
-    <Card shadow={0}>
-      <CardTitle>Compiler</CardTitle>
-      <CardText>
-        <RadioGroup container="ul" childContainer="li" name="compiler" value={props.config.compiler} onChange={props.setCompiler}>
-          {[for key id in compilers:
-            <Radio key={id} value={id} ripple>{id}</Radio>
-          ]}
-        </RadioGroup>
-      </CardText>
-    </Card>
-    <Card shadow={0}>
-      <CardTitle>Plugins</CardTitle>
-      <CardText>
-        <CheckGroup value={props.config.plugins} onChange={props.setPlugins}>
-          {[for key id in plugins:
-            <Checkbox key={id} label={id} value={id} ripple />
-          ]}
-        </CheckGroup>
-      </CardText>
-    </Card>
+    <Grid>
+      <Cell col={6}>
+        <Card shadow={0}>
+          <CardTitle>Compiler</CardTitle>
+          <CardText>
+            <CompilerSelector value={props.config.compiler} onChange={props.setCompiler} />
+          </CardText>
+        </Card>
+      </Cell>
+      <Cell col={6}>
+        <Card shadow={0}>
+          <CardTitle>Compiler Features</CardTitle>
+          <CardText>
+            <FeatureSelector compiler={compilers[props.config.compiler or '']} value={props.config.features} onChange={props.setFeatures} />
+          </CardText>
+        </Card>
+      </Cell>
+      <Cell col={6}>
+        <Card shadow={0}>
+          <CardTitle>Babel Plugins</CardTitle>
+          <CardText>
+            <PluginSelector value={props.config.plugins} onChange={props.setPlugins} />
+          </CardText>
+        </Card>
+      </Cell>
+    </Grid>
   </div>
 )
 

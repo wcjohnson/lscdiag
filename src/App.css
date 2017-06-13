@@ -2,11 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
 .App-header {
   background-color: #222;
   height: 150px;
@@ -16,11 +11,6 @@
 
 .App-intro {
   font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
 
 a {
@@ -53,4 +43,12 @@ li.active {
 .ReactModal__Overlay {
   background-color: rgba(0, 0, 0, 0.5) !important;
   z-index: 5000;
+}
+
+.applyFont {
+  font-family: "Fira Sans","Helvetica Neue","Helvetica","Arial","sans-serif";
+}
+
+.spaceRight {
+  margin-right: 0.2em
 }

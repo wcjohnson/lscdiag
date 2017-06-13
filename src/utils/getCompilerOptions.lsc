@@ -1,9 +1,15 @@
 import plugins from './plugins'
 
-export default getCompilerOptions(config) ->
-  {
+export default getCompilerOptions(compiler, config) ->
+  opts = {
     plugins: [
       for elem plugin in (config.plugins or []):
         if plugins[plugin]: plugins[plugin]
     ]
   }
+
+  if compiler.metadata and config.features:
+    features = { for elem feat in config.features: (feat, true) }
+    opts.compilerPluginOpts = { features }
+
+  opts

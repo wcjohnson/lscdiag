@@ -1,8 +1,7 @@
 import base64url from 'base64-url'
 import pako from 'pako'
 import url from 'url'
-
-import tree from '.'
+import { replaceAppState } from './reset'
 
 export createPermalink(state, origUrl) ->
   deflated = pako.deflate(JSON.stringify(state), { to: 'string'})
@@ -46,10 +45,7 @@ reallyResolvePermalink(history, version, state) ->
     console.debug("garbled permalink data")
     return
 
-  // Discard existing fixtures
-  tree.fixtures.splice(0, tree.fixtures.length)
-  // Reload new state
-  tree.store.dispatch({type: 'RESET_APP_STATE', payload: resolved})
+  replaceAppState(resolved)
 
 export resolvePermalink(history, version, state) ->
   setTimeout(-> reallyResolvePermalink(history, version, state), 0)

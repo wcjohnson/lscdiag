@@ -12,12 +12,19 @@ import withConstHandlers from 'hawks/lib/withConstHandlers'
 
 import { fixtures } from './state/Fixture'
 import { resolvePermalink } from './state/permalink'
+import { resetAppState } from './state/reset'
 
 import CodePanel from './components/CodePanel'
 import OutputPanel from './components/OutputPanel'
 import Permalink from './components/Permalink'
 
 import querystring from 'querystring'
+
+import lscLogo from './images/lsclogo.svg'
+
+colorized = {
+  color: '#455861'
+}
 
 Main = compose(
   pure
@@ -35,6 +42,7 @@ Main = compose(
   )
   withConstHandlers({
     addFixture: -> fixtures.push(true)
+    reset: -> resetAppState()
     openDialog: (props) -> props.setDialogOpen(true)
     closeDialog: (props) -> props.setDialogOpen(false)
   })
@@ -45,10 +53,28 @@ Main = compose(
     stuff.push(<Cell key={`${i}.2`} col={6}><OutputPanel fixture={fixture}/></Cell>)
 
   <Layout fixedHeader>
-    <Header title="lscdiag">
+    <Header
+      style={{backgroundColor: '#DAF3FF', color: '#455861'}}
+      title={
+        <span className="applyFont">
+          <img src={lscLogo} width="35" style={{marginRight: '0.75em', position: 'relative', bottom: 2}} />
+          lscdiag
+        </span>
+      }
+    >
       <Navigation>
-        <a href="#" onClick={props.addFixture}>Add Fixture</a>
-        <a href="#" onClick={props.openDialog}>Permalink</a>
+        <a href="#" style={colorized} onClick={props.reset}>
+          <i className="material-icons spaceRight">layers_clear</i>
+          Reset
+        </a>
+        <a href="#" style={colorized} onClick={props.addFixture}>
+          <i className="material-icons spaceRight">add</i>
+          Add Fixture
+        </a>
+        <a href="#" style={colorized} onClick={props.openDialog}>
+          <i className="material-icons spaceRight">link</i>
+          Permalink
+        </a>
       </Navigation>
     </Header>
     <Content>

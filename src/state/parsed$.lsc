@@ -4,6 +4,7 @@ import toBehaviorSubject$ from 'observable-utils/lib/toBehaviorSubject'
 
 import compilers from '../utils/compilers'
 import createMarker from '../utils/createMarker'
+import getCompilerOptions from '../utils/getCompilerOptions'
 
 export default parsed$(fixture) ->
   combineLatest$([fixture.source.code, fixture.config.get])
@@ -13,7 +14,9 @@ export default parsed$(fixture) ->
       errorMessage: 'Invalid compiler setting'
       errorMarker: null
     }
-    result = compiler.parse(source)
+
+    opts = compiler~getCompilerOptions(config)
+    result = compiler.parse(source, opts.compilerPluginOpts)
     // Push compilation errors to UI
     if result.errorMarker:
       aceMarker = createMarker('hlt_error', result.errorMarker)
