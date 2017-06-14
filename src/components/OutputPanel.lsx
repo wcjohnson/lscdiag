@@ -1,5 +1,8 @@
 import React from 'react'
 import { Tabs, Tab } from 'react-mdl/lib/Tabs'
+import Button from 'react-mdl/lib/Button'
+
+import { duplicateFixture } from '../state/Fixture'
 
 import compose from 'recompose/compose'
 import pure from 'recompose/pure'
@@ -27,10 +30,12 @@ OutputPanel = compose(
   withConstHandlers({
     setActiveTab(props, tabIndex) ->
       props.fixture.ui.setRightTab(tabIndex)
+    duplicate(props) ->
+      duplicateFixture(props.fixture)
   })
 )(OutputPanel(props) ->
   Subcomponent = componentForTab[props.activeTab]
-  <div>
+  <div style={{position: 'relative'}}>
     <Tabs
       activeTab={props.activeTab}
       onChange={props.setActiveTab}
@@ -42,6 +47,7 @@ OutputPanel = compose(
     <section>
       <Subcomponent fixture={props.fixture} />
     </section>
+    <Button raised ripple style={{position: 'absolute', top: 5, right: 20}} onClick={props.duplicate}>Duplicate</Button>
   </div>
 )
 

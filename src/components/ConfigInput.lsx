@@ -22,11 +22,36 @@ CompilerSelector({value, onChange}) ->
     ]}
   </RadioGroup>
 
+CompilerOptionEntry({option, value, optionName, checked, onChange}) ->
+  <div style={{padding: 5}}>
+    <Checkbox
+      label={optionName}
+      value={value}
+      checked={checked}
+      onChange={onChange}
+      ripple
+    />
+    <div>
+      {option.description}
+    </div>
+    {if option.stage:
+      <div><strong>Experimental</strong> (Stage: {option.stage})</div>
+    }
+  </div>
+
 FeatureSelector({compiler, value, onChange}) ->
+  // XXX: only needed for 2.0.0-beta.4 - remove once that's deprecated
   if compiler?.metadata?.features:
     <CheckGroup value={value} onChange={onChange}>
       {[for key id in compiler.metadata.features:
         <Checkbox key={id} label={id} value={id} ripple />
+      ]}
+    </CheckGroup>
+  else if compiler?.metadata?.options:
+    <CheckGroup value={value} onChange={onChange}>
+      {[for key id, val entry in compiler.metadata.options:
+        if entry.valueType == "boolean":
+          <CompilerOptionEntry value={id} key={id} optionName={id} option={entry} />
       ]}
     </CheckGroup>
   else:

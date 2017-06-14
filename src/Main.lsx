@@ -10,7 +10,7 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 import withConstHandlers from 'hawks/lib/withConstHandlers'
 
-import { fixtures } from './state/Fixture'
+import { fixtures, addFixture } from './state/Fixture'
 import { resolvePermalink } from './state/permalink'
 import { resetAppState } from './state/reset'
 
@@ -41,7 +41,7 @@ Main = compose(
     {}
   )
   withConstHandlers({
-    addFixture: -> fixtures.push(true)
+    addFixture: -> addFixture()
     reset: -> resetAppState()
     openDialog: (props) -> props.setDialogOpen(true)
     closeDialog: (props) -> props.setDialogOpen(false)

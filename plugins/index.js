@@ -5,7 +5,7 @@ function addPlugin(name, pluginEntry) {
 }
 
 addPlugin(
-  "partial-application",
+  "partial-application@1.6.0-alpha.1",
   require("./flat/node_modules/babel-plugin-partial-application")
 );
 

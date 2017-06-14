@@ -1,4 +1,4 @@
-import { ReduxComponent, withSubtree } from 'redux-components'
+import { ReduxComponent, withSubtree, action } from 'redux-components'
 import ComponentList from 'redux-components-list'
 
 import Source from './Source'
@@ -13,14 +13,32 @@ Fixture = withSubtree(-> ({
   ui: UI
   config: Config
 }))(class extends ReduxComponent:
+  static verbs = ['REPLACE_STATE']
+
+  reducer(state, action) ->
+    match action.type:
+      | == this.REPLACE_STATE: action.payload
+      | else: state
+
   componentWillMount() ->
     // Construct observables corresponding to this fixture.
     this.compiled$ = compiled$(this)
     this.parsed$ = parsed$(this)
     Object.assign(this, markers$(this))
+
+  @action({isDispatcher: true})
+  replaceState(nextState) ->
+    { type: this.REPLACE_STATE, payload: nextState }
 )
 
 Fixtures = ComponentList(-> Fixture)
 export fixtures = new Fixtures
+
+export addFixture() ->
+  fixtures.push(true)
+
+export duplicateFixture(fixture) ->
+  fixtures.push(true)
+  fixtures.get(fixtures.length - 1).replaceState(fixture.state)
 
 export default Fixture
