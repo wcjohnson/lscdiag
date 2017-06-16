@@ -34,7 +34,9 @@ CheckGroup = compose(
     { childHandlers }
   )
 )(CheckGroup(props) ->
-  { children, childHandlers, value, onChange, ...otherProps } = props
+  // Deliberately consuming the onChange prop
+  // eslint-disable-next-line no-unused-vars
+  { children, childHandlers, value, onChange, parentContainer = "div", ...otherProps } = props
 
   let i = -1
   clonedChildren = React.Children.map(children, (child) ->
@@ -45,9 +47,7 @@ CheckGroup = compose(
     })
   )
 
-  <div {...otherProps}>
-    {clonedChildren}
-  </div>
+  React.createElement(parentContainer, otherProps, clonedChildren)
 )
 
 export default CheckGroup

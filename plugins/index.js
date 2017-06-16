@@ -10,6 +10,11 @@ addPlugin(
 );
 
 addPlugin(
+  "partial-application@1.6.0-alpha.2",
+  require("./partial-application_1_6_0_alpha_2/node_modules/babel-plugin-partial-application")
+);
+
+addPlugin(
   "transform-react-jsx",
   require("./flat/node_modules/babel-plugin-transform-react-jsx")
 );

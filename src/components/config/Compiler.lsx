@@ -1,0 +1,129 @@
+import React from 'react'
+
+import { Card, CardTitle, CardText } from 'react-mdl/lib/Card'
+import RadioGroup from 'react-mdl/lib/RadioGroup'
+import Radio from 'react-mdl/lib/Radio'
+import Checkbox from 'react-mdl/lib/Checkbox'
+import CheckGroup from '../CheckGroup'
+
+import compose from 'recompose/compose'
+import pure from 'recompose/pure'
+import withConstHandlers from 'hawks/lib/withConstHandlers'
+import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
+
+import compilers from '../../utils/compilers'
+
+// Monkey-patch to silence incorrect propTypes errors
+delete RadioGroup.propTypes.container
+delete RadioGroup.propTypes.childContainer
+
+FeatureSelector({compiler, value, onChange}) ->
+  <CheckGroup value={value} onChange={onChange} style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', width: '100%'}}>
+    {[for key id, val entry in compiler.metadata.options:
+      if entry.valueType == "boolean":
+        <CompilerToggleEntry value={id} key={id} optionName={id} option={entry} />
+    ]}
+  </CheckGroup>
+
+CompilerToggleEntry({option, value, optionName, checked, onChange}) ->
+  <div style={{width: '50%', marginTop: 10, marginBottom: 10}}>
+    <Checkbox
+      label={<span style={{fontWeight:'bold'}}>{optionName}</span>}
+      value={value}
+      checked={checked}
+      onChange={onChange}
+      ripple
+    />
+    <div>
+      {option.description}
+    </div>
+    {if option.stage:
+      <div><strong>Experimental</strong> (Stage: {option.stage})</div>
+    }
+  </div>
+
+RadioContainer({children}) ->
+  <div style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', width: '100%'}}>
+    {children}
+  </div>
+
+ChildContainer({children}) ->
+  <div style={{width: '50%'}}>
+    {children}
+  </div>
+
+CompilerSelector({value, onChange}) ->
+  <RadioGroup container={RadioContainer} childContainer={ChildContainer} name="compiler" value={value} onChange={onChange}>
+    {[for key id in compilers:
+      <Radio key={id} value={id} ripple>{id}</Radio>
+    ]}
+  </RadioGroup>
+
+CompilerOptionEntry({optionName, option, value, onChange}) ->
+  <RadioGroup container="div" childContainer="div" name={`option${optionName}`} value={value} onChange={onChange}>
+    {[for elem id in option.options:
+      <Radio key={id} value={id} ripple>{id}</Radio>
+    ]}
+  </RadioGroup>
+
+OptionSelector = pure(({compiler, value, onChange}) ->
+  <div>
+    {[for key id, val option in compiler.metadata.options:
+      if option.valueType == "option" and option.options:
+        // Assign the option's value to its id key in the settings.
+        optionOnChange = (e) ->
+          onChange(Object.assign({}, value, {[id]: e.target.value}))
+
+        optionValue = value?[id] or option.defaultValue
+        <div key={id}>
+          <div style={{fontSize: '16px', lineHeight: '24px', fontWeight: 'bold'}}>{id}</div>
+          <CompilerOptionEntry value={optionValue} optionName={id} option={option} onChange={optionOnChange} />
+          <div>
+            {option.description}
+          </div>
+          {if option.stage:
+            <div><strong>Experimental</strong> (Stage: {option.stage})</div>
+          }
+        </div>
+    ]}
+  </div>
+)
+
+CompilerConfig = compose(
+  pure
+  withPropsFromObservables(props -> ({
+    config: props.fixture.config.get
+  }))
+  withConstHandlers({
+    setCompiler(props, e) ->
+      props.fixture.config.setCompiler(e.target.value)
+
+    setFeatures(props, features) ->
+      props.fixture.config.setFeatures(features)
+
+    setOptions(props, options) ->
+      props.fixture.config.setOptions(options)
+  })
+)(CompilerConfig({config, setCompiler, setFeatures, setOptions}) ->
+  compiler = compilers[config.compiler or '']
+
+  <div>
+    <Card shadow={0} style={{margin: 5, width: '100%'}}>
+      <CardTitle>Compiler</CardTitle>
+      <CardText>
+        <CompilerSelector value={config.compiler} onChange={setCompiler} />
+        { if compiler?.metadata?.options:
+          <h5>Options</h5>
+        }
+        { if compiler?.metadata?.options:
+          <FeatureSelector compiler={compiler} value={config.features} onChange={setFeatures} />
+        }
+        { if compiler?.metadata?.options:
+          <OptionSelector compiler={compiler} value={config.options} onChange={setOptions} />
+        }
+      </CardText>
+    </Card>
+  </div>
+)
+
+export default CompilerConfig

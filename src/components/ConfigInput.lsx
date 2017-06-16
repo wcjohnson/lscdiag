@@ -1,61 +1,16 @@
 import React from "react"
 
-import RadioGroup from 'react-mdl/lib/RadioGroup'
-import Radio from 'react-mdl/lib/Radio'
 import CheckGroup from './CheckGroup'
 import Checkbox from 'react-mdl/lib/Checkbox'
 import { Card, CardTitle, CardText } from 'react-mdl/lib/Card'
-import { Grid, Cell } from "react-mdl/lib/Grid"
+import CompilerConfig from './config/Compiler.lsx'
 
 import compose from 'recompose/compose'
 import pure from 'recompose/pure'
 import withConstHandlers from 'hawks/lib/withConstHandlers'
 import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
-import compilers from '../utils/compilers'
 import plugins from '../utils/plugins'
-
-CompilerSelector({value, onChange}) ->
-  <RadioGroup container="div" childContainer="div" name="compiler" value={value} onChange={onChange}>
-    {[for key id in compilers:
-      <Radio key={id} value={id} ripple>{id}</Radio>
-    ]}
-  </RadioGroup>
-
-CompilerOptionEntry({option, value, optionName, checked, onChange}) ->
-  <div style={{padding: 5}}>
-    <Checkbox
-      label={optionName}
-      value={value}
-      checked={checked}
-      onChange={onChange}
-      ripple
-    />
-    <div>
-      {option.description}
-    </div>
-    {if option.stage:
-      <div><strong>Experimental</strong> (Stage: {option.stage})</div>
-    }
-  </div>
-
-FeatureSelector({compiler, value, onChange}) ->
-  // XXX: only needed for 2.0.0-beta.4 - remove once that's deprecated
-  if compiler?.metadata?.features:
-    <CheckGroup value={value} onChange={onChange}>
-      {[for key id in compiler.metadata.features:
-        <Checkbox key={id} label={id} value={id} ripple />
-      ]}
-    </CheckGroup>
-  else if compiler?.metadata?.options:
-    <CheckGroup value={value} onChange={onChange}>
-      {[for key id, val entry in compiler.metadata.options:
-        if entry.valueType == "boolean":
-          <CompilerOptionEntry value={id} key={id} optionName={id} option={entry} />
-      ]}
-    </CheckGroup>
-  else:
-    <div>Selected compiler does not export metadata.</div>
 
 PluginSelector({value, onChange}) ->
   <CheckGroup value={value} onChange={onChange}>
@@ -70,43 +25,18 @@ ConfigInput = compose(
     config: props.fixture.config.get
   }))
   withConstHandlers({
-    setCompiler(props, e) ->
-      props.fixture.config.setCompiler(e.target.value)
-
     setPlugins(props, plugins) ->
       props.fixture.config.setPlugins(plugins)
-
-    setFeatures(props, features) ->
-      props.fixture.config.setFeatures(features)
   })
 )((props) ->
   <div>
-    <Grid>
-      <Cell col={6}>
-        <Card shadow={0}>
-          <CardTitle>Compiler</CardTitle>
-          <CardText>
-            <CompilerSelector value={props.config.compiler} onChange={props.setCompiler} />
-          </CardText>
-        </Card>
-      </Cell>
-      <Cell col={6}>
-        <Card shadow={0}>
-          <CardTitle>Compiler Features</CardTitle>
-          <CardText>
-            <FeatureSelector compiler={compilers[props.config.compiler or '']} value={props.config.features} onChange={props.setFeatures} />
-          </CardText>
-        </Card>
-      </Cell>
-      <Cell col={6}>
-        <Card shadow={0}>
-          <CardTitle>Babel Plugins</CardTitle>
-          <CardText>
-            <PluginSelector value={props.config.plugins} onChange={props.setPlugins} />
-          </CardText>
-        </Card>
-      </Cell>
-    </Grid>
+    <CompilerConfig fixture={props.fixture} />
+    <Card shadow={0}  style={{margin: 5, width: '100%'}}>
+      <CardTitle>Babel Plugins</CardTitle>
+      <CardText>
+        <PluginSelector value={props.config.plugins} onChange={props.setPlugins} />
+      </CardText>
+    </Card>
   </div>
 )
 

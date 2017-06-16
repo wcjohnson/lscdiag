@@ -8,11 +8,13 @@ export default getCompilerOptions(compiler, config) ->
     ]
   }
 
+  compilerPluginOpts = {}
+
   if config.features:
-    features = { for elem feat in config.features: (feat, true) }
-    if compiler.metadata?.features: // XXX: only needed for 2.0-beta.4
-      opts.compilerPluginOpts = { features }
-    elif compiler.metadata?.options:
-      opts.compilerPluginOpts = features
+    for elem feat in config.features: compilerPluginOpts[feat] = true
+  if config.options:
+    Object.assign(compilerPluginOpts, config.options)
+
+  opts.compilerPluginOpts = compilerPluginOpts
 
   opts

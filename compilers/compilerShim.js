@@ -7,6 +7,7 @@ function compilerShim(compilerPlugin) {
     // default opts
     if (!opts) opts = {};
     if (!opts.plugins) opts.plugins = [];
+    if (opts.compilerPluginOpts) delete opts.compilerPluginOpts;
     opts.plugins.unshift(compilerPlugin);
     opts.sourceMaps = true;
 
