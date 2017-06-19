@@ -33,6 +33,16 @@ addCompiler(
   require("./oigroup_lightscript_2_0_0_beta_7/compiler.js")
 );
 
+addCompiler(
+  "oigroup@2.0.0-beta.8",
+  require("./oigroup_lightscript_2_0_0_beta_8/compiler.js")
+);
+
+addCompiler(
+  "oigroup@2.0.0-beta.9",
+  require("./oigroup_lightscript_2_0_0_beta_9/compiler.js")
+);
+
 compilers["latest"] = compilers["oigroup@1.1.0"]
 
 module.exports = compilers;

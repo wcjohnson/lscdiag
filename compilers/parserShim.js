@@ -10,7 +10,7 @@ function parserShim(parser) {
   return function parse(code, opts) {
     var ast;
 
-    if (!opts) opts = defaultParserOpts;
+    opts = defaultParserOpts;
 
     try {
       ast = parser.parse(code, opts);

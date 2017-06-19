@@ -36,6 +36,7 @@ function configurableCompilerShim(compilerPlugin, metadata) {
     var ast;
 
     var parserOpts = metadata.getParserOpts(opts);
+    parserOpts.sourceType = "module";
 
     try {
       ast = parser.parse(code, parserOpts);
