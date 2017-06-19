@@ -4,7 +4,7 @@ import url from 'url'
 import { replaceAppState } from './reset'
 
 export createPermalink(state, origUrl) ->
-  deflated = pako.deflate(JSON.stringify(state), { to: 'string'})
+  deflated = pako.deflate(JSON.stringify(state), { to: 'string', level: 9 })
   stateArg = base64url.encode(deflated)
 
   parsed = url.parse(origUrl)

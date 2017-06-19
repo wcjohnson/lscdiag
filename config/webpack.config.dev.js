@@ -223,7 +223,12 @@ module.exports = {
                   "targets": {
                     "ie": 10
                   }
-                }
+                },
+                "noEnforcedSubscriptIndentation": true,
+                "bangCall": true,
+                "safeCall": true,
+                "existential": true,
+                "enhancedComprehension": true
               }
             ]
           ],

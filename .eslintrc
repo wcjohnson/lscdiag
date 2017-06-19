@@ -9,7 +9,11 @@
       "unix"
     ],
     "no-console": 0,
-    "no-extra-semi": 0
+    "no-extra-semi": 0,
+    "no-unexpected-multiline": 0,
+    "no-empty-character-class": 0,
+    "no-regex-spaces": 0,
+    "react/prop-types": 0
   },
   "parserOptions": {
     "sourceType": "module"

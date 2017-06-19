@@ -9,10 +9,10 @@ export default class Config extends ReduxComponent:
 
   reducer(state = initialState, action) ->
     match action.type:
-      | == this.SET_COMPILER: ({}~assign(state, { compiler: action.payload }))
-      | == this.SET_FEATURES: ({}~assign(state, { features: action.payload }))
-      | == this.SET_PLUGINS: ({}~assign(state, { plugins: action.payload }))
-      | == this.SET_OPTIONS: ({}~assign(state, { options: action.payload }))
+      | this.SET_COMPILER: ({}~assign(state, { compiler: action.payload }))
+      | this.SET_FEATURES: ({}~assign(state, { features: action.payload }))
+      | this.SET_PLUGINS: ({}~assign(state, { plugins: action.payload }))
+      | this.SET_OPTIONS: ({}~assign(state, { options: action.payload }))
       | else: state
 
   @action({isDispatcher: true})

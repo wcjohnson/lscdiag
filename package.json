@@ -19,11 +19,12 @@
     "recompose": "^0.23.1",
     "redux": "^3.6.0",
     "redux-components": "^0.4.6",
-    "redux-components-list": "^0.4.7"
+    "redux-components-list": "^0.4.7",
+    "@oigroup/lightscript-runtime": "^0.1.1"
   },
   "devDependencies": {
-    "@oigroup/babel-preset-lightscript": "^1.0.4",
-    "@oigroup/lightscript-eslint": "^1.0.4",
+    "@oigroup/babel-preset-lightscript": "^2.0.0-rc.1",
+    "@oigroup/lightscript-eslint": "^2.0.0-rc.1.1",
     "autoprefixer": "7.1.0",
     "babel-core": "6.24.1",
     "babel-eslint": "7.2.3",

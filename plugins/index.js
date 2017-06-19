@@ -5,13 +5,8 @@ function addPlugin(name, pluginEntry) {
 }
 
 addPlugin(
-  "partial-application@1.6.0-alpha.1",
+  "partial-application",
   require("./flat/node_modules/babel-plugin-partial-application")
-);
-
-addPlugin(
-  "partial-application@1.6.0-alpha.2",
-  require("./partial-application_1_6_0_alpha_2/node_modules/babel-plugin-partial-application")
 );
 
 addPlugin(

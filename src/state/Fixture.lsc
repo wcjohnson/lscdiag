@@ -17,7 +17,7 @@ Fixture = withSubtree(-> ({
 
   reducer(state, action) ->
     match action.type:
-      | == this.REPLACE_STATE: action.payload
+      | this.REPLACE_STATE: action.payload
       | else: state
 
   componentWillMount() ->
