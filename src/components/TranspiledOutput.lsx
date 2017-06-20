@@ -9,11 +9,10 @@ import LOC from './LOC'
 
 enhance = compose(
   pure
-  withPropsFromObservables((props) ->
+  withPropsFromObservables! (props) ->
     ({
       compiled: props.fixture.compiled$
     })
-  )
 )
 
 TranspiledOutput = enhance(TranspiledOutput(props) ->

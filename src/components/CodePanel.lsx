@@ -18,14 +18,14 @@ componentForTab = [
 
 CodePanel = compose(
   pure
-  branch(props -> !props.fixture, renderComponent(-> <div />))
-  withPropsFromObservables((props) -> ({
+  branch! (props -> !props.fixture), renderComponent(-> <div />)
+  withPropsFromObservables! (props) -> ({
     activeTab: props.fixture.ui.getLeftTab
-  }))
-  withConstHandlers({
+  })
+  withConstHandlers! {
     setActiveTab(props, tabIndex) ->
       props.fixture.ui.setLeftTab(tabIndex)
-  })
+  }
 )((props) ->
   Subcomponent = componentForTab[props.activeTab]
   <div>

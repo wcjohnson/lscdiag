@@ -23,16 +23,16 @@ componentForTab = [
 
 OutputPanel = compose(
   pure
-  branch(props -> !props.fixture, renderComponent(-> <div />))
-  withPropsFromObservables((props) -> ({
+  branch! (props -> !props.fixture), renderComponent(-> <div />)
+  withPropsFromObservables! (props) -> ({
     activeTab: props.fixture.ui.getRightTab
-  }))
-  withConstHandlers({
+  })
+  withConstHandlers! {
     setActiveTab(props, tabIndex) ->
       props.fixture.ui.setRightTab(tabIndex)
     duplicate(props) ->
       duplicateFixture(props.fixture)
-  })
+  }
 )(OutputPanel(props) ->
   Subcomponent = componentForTab[props.activeTab]
   <div style={{position: 'relative'}}>

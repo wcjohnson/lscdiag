@@ -15,22 +15,21 @@ import { entryForNode } from './AstEntry'
 
 AstOutput = compose(
   pure
-  withConstHandlers({
+  withConstHandlers! {
     setActiveNode: (props, x) -> props.fixture.ui.setSelectedNode(x)
-  })
-  withPropsOnChange(['fixture'], (props) ->
+  }
+  withPropsOnChange! ['fixture'], (props) ->
     data$ =
-      combineLatest([props.fixture.parsed$, props.fixture.ui.getSelectedNode])
-      ~map(([parsed, activeNode]) ->
+      combineLatest! [props.fixture.parsed$, props.fixture.ui.getSelectedNode]
+      ~map! ([parsed, activeNode]) ->
         let entries, errorMessage
 
         if parsed.ast?.program:
           // Build react components for ast entries
-          now entries = buildFlatTree(
+          now entries = buildFlatTree!
             parsed.ast.program
             activeNode
             (node) -> entryForNode(node, node.idx == activeNode, props.setActiveNode)
-          )
           // Generate marker for active node
           activeEntry = entries[activeNode]
           if activeEntry and activeEntry.sourceLoc:
@@ -41,10 +40,8 @@ AstOutput = compose(
           now errorMessage = parsed.errorMessage or "Unknown error."
 
         { entries, errorMessage }
-      )
     { data$ }
-  )
-  withPropsFromObservables((props) -> ({ data: props.data$ }))
+  withPropsFromObservables! (props) -> ({ data: props.data$ })
 )((props) ->
   <div>
     {if props.data?.errorMessage:

@@ -9,13 +9,13 @@ import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
 enhance = compose(
   pure
-  withConstHandlers({
+  withConstHandlers! {
     onChangeCode: (props, nextCode) -> props.fixture.source.set(nextCode)
-  })
-  withPropsFromObservables((props) -> ({
+  }
+  withPropsFromObservables! (props) -> ({
     code: props.fixture.source.code
     markers: props.fixture.markers$
-  }))
+  })
 )
 
 CodeInput = enhance(({code, onChangeCode, markers, name}) ->

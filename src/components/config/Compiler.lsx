@@ -17,8 +17,11 @@ import compilers from '../../utils/compilers'
 delete RadioGroup.propTypes.container
 delete RadioGroup.propTypes.childContainer
 
-FeatureSelector({compiler, value, onChange}) ->
-  <CheckGroup value={value} onChange={onChange} style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', width: '100%'}}>
+FeatureSelector = pure! FeatureSelector({compiler, value, onChange}) ->
+  <CheckGroup
+    value={value} onChange={onChange}
+    style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', width: '100%'}}
+  >
     {[for key id, val entry in compiler.metadata.options:
       if entry.valueType == "boolean":
         <CompilerToggleEntry value={id} key={id} optionName={id} option={entry} />
@@ -66,7 +69,7 @@ CompilerOptionEntry({optionName, option, value, onChange}) ->
     ]}
   </RadioGroup>
 
-OptionSelector = pure(({compiler, value, onChange}) ->
+OptionSelector = pure! OptionSelector({compiler, value, onChange}) ->
   <div>
     {[for key id, val option in compiler.metadata.options:
       if option.valueType == "option" and option.options:
@@ -87,14 +90,13 @@ OptionSelector = pure(({compiler, value, onChange}) ->
         </div>
     ]}
   </div>
-)
 
 CompilerConfig = compose(
   pure
-  withPropsFromObservables(props -> ({
+  withPropsFromObservables! props -> ({
     config: props.fixture.config.get
-  }))
-  withConstHandlers({
+  })
+  withConstHandlers! {
     setCompiler(props, e) ->
       props.fixture.config.setCompiler(e.target.value)
 
@@ -103,7 +105,7 @@ CompilerConfig = compose(
 
     setOptions(props, options) ->
       props.fixture.config.setOptions(options)
-  })
+  }
 )(CompilerConfig({config, setCompiler, setFeatures, setOptions}) ->
   compiler = compilers[config.compiler or '']
 

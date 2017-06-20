@@ -21,13 +21,13 @@ PluginSelector({value, onChange}) ->
 
 ConfigInput = compose(
   pure
-  withPropsFromObservables(props -> ({
+  withPropsFromObservables! props -> ({
     config: props.fixture.config.get
-  }))
-  withConstHandlers({
+  })
+  withConstHandlers! {
     setPlugins(props, plugins) ->
       props.fixture.config.setPlugins(plugins)
-  })
+  }
 )((props) ->
   <div>
     <CompilerConfig fixture={props.fixture} />

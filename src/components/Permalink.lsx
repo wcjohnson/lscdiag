@@ -15,19 +15,19 @@ import { createPermalink } from '../state/permalink'
 
 Permalink = compose(
   pure
-  withPropsFromObservables(-> ({ state: tree.get }))
-  withProps((props) -> ({
+  withPropsFromObservables! -> ({ state: tree.get })
+  withProps! (props) -> ({
     link: createPermalink(props.state, document.location.href) or ''
-  }))
-  withConstHandlers({
-    onCopy: (props) -> copy(props.link)
   })
+  withConstHandlers! {
+    onCopy: (props) -> copy(props.link)
+  }
 )((props) ->
   <div>
     <Textfield value={props.link} onChange={-> return} label="Link" rows={10} style={{width: '100%'}}/>
     <div>({props.link.length} characters)</div>
     { if props.link.length > 2000:
-      <strong>WARNING! URLs longer than 2000 characters won&apos;t work on some browsers!</strong>
+      <div><strong>WARNING! URLs longer than 2000 characters won&apos;t work on some browsers!</strong></div>
     }
     <Button raised colored ripple onClick={props.onCopy}>Copy to Clipboard</Button>
     <Button style={{marginLeft: 5}} raised colored ripple onClick={props.onClose}>Close</Button>
