@@ -19,10 +19,10 @@ addCompiler(
 );
 
 addCompiler(
-  "oigroup@2.0.0-rc.6",
-  require("./oigroup_lightscript_2_0_0_rc_6/compiler.js")
+  "oigroup@2.0.0",
+  require("./oigroup_lightscript_2_0_0/compiler.js")
 );
 
-compilers["latest"] = compilers["oigroup@2.0.0-rc.6"]
+compilers["latest"] = compilers["oigroup@2.0.0"]
 
 module.exports = compilers;
