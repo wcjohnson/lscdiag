@@ -229,13 +229,13 @@ module.exports = {
                   "targets": {
                     "ie": 10
                   }
-                }
-              },
-              "noEnforcedSubscriptIndentation": true,
-              "bangCall": true,
-              "safeCall": true,
-              "existential": true,
-              "enhancedComprehension": true
+                },
+                "noEnforcedSubscriptIndentation": true,
+                "bangCall": true,
+                "safeCall": true,
+                "existential": true,
+                "enhancedComprehension": true
+              }
             ]
           ],
           // This is a feature of `babel-loader` for webpack (not Babel itself).

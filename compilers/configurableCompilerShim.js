@@ -1,10 +1,11 @@
 var transform = require('babel-standalone').transform;
+var prettier = require('@oigroup/prettier-babylon');
 
 function configurableCompilerShim(compilerPlugin, metadata) {
   var parser = metadata.parser;
 
   var compile = function compile(src, opts) {
-    var ast, code, map, rst;
+    var ast, code, map, rst, prettyCode;
 
     // default opts
     opts = Object.assign({}, opts);
@@ -27,6 +28,13 @@ function configurableCompilerShim(compilerPlugin, metadata) {
         errorMessage: err.message,
         errorMarker: err.loc
       };
+    }
+
+    try {
+      prettyCode = prettier.format(code);
+      code = prettyCode;
+    } catch (err) {
+      console.log("Prettier error", err);
     }
 
     return { js: code, lsc: src, ast: ast, map: map };
