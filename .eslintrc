@@ -16,7 +16,7 @@
   },
   "env": {
     "mocha": true,
-    "browser": true
+    "shared-node-browser": true
   },
   "extends": [
     "eslint:recommended",
