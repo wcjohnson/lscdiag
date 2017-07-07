@@ -24,8 +24,8 @@
     "redux-components-list": "^0.4.7"
   },
   "devDependencies": {
-    "@oigroup/babel-preset-lightscript": "^2.0.0",
-    "@oigroup/lightscript-eslint": "^2.0.0",
+    "@oigroup/babel-preset-lightscript": "^2.1.0",
+    "@oigroup/lightscript-eslint": "^2.1.0",
     "autoprefixer": "7.1.0",
     "babel-core": "6.24.1",
     "babel-eslint": "7.2.3",

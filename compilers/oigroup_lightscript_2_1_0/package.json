@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@oigroup/babel-plugin-lightscript": "2.1.0"
+  }
+}
