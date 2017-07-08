@@ -42,6 +42,12 @@ function configurableCompilerShim(compilerPlugin, metadata) {
 
   var parse = function parse(code, opts) {
     var ast;
+    var configDirectives = {};
+
+    if (metadata.parseConfigurationDirectives) {
+      configDirectives = metadata.parseConfigurationDirectives(code);
+      opts = Object.assign(opts || {}, configDirectives);
+    }
 
     var parserOpts = metadata.getParserOpts(opts);
     parserOpts.sourceType = "module";
