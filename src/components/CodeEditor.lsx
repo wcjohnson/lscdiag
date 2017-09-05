@@ -29,6 +29,10 @@ export CodeEditor({code, syntax, readOnly, numLines, markers, name, onChange}) -
     markers={markers}
     highlightActiveLine
     onChange={onChange}
+    style={{
+      fontSize: 12
+      fontFamily: '"Fira Code", Monaco, Menlo, monospace'
+    }}
   />
 
 export { createMarker }
