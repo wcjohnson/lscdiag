@@ -33,6 +33,11 @@ addCompiler(
   require("./oigroup_lightscript_3_1_0_1/compiler.js")
 );
 
+addCompiler(
+  "oigroup@3.1.0-alpha.2",
+  require("./oigroup_lightscript_3_1_0_2/compiler.js")
+);
+
 compilers["latest"] = compilers["oigroup@3.0.0"];
 compilers["oigroup@3.1.0-pre"] = compilers["oigroup@3.1.0-alpha.0"];
 
