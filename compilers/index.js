@@ -24,10 +24,10 @@ addCompiler(
 );
 
 addCompiler(
-  "oigroup@3.1.0",
-  require("./oigroup_lightscript_3_1_0/compiler.js")
+  "oigroup@3.1.1",
+  require("./oigroup_lightscript_3_1_1/compiler.js")
 );
 
-compilers["latest"] = compilers["oigroup@3.1.0"];
+compilers["latest"] = compilers["oigroup@3.1.1"];
 
 module.exports = compilers;
