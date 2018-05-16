@@ -5,11 +5,6 @@ function addPlugin(name, pluginEntry) {
 }
 
 addPlugin(
-  "partial-application",
-  require("./flat/node_modules/babel-plugin-partial-application")
-);
-
-addPlugin(
   "transform-react-jsx",
   require("./flat/node_modules/babel-plugin-transform-react-jsx")
 );
