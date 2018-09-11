@@ -1,0 +1,56 @@
+import React from 'react'
+import Button from 'react-mdl/lib/Button'
+
+import pure from 'recompose/pure'
+import compose from 'recompose/compose'
+import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
+
+let notebooks = []
+
+moreFixturesThanRunkitEmbeds() ->
+  document.querySelectorAll('iframe[src^="https://runkit.com/e"]').length <
+    document.querySelectorAll('#js').length
+
+run(e, code) ->
+  codeContainer = e.currentTarget.parentNode
+
+  if moreFixturesThanRunkitEmbeds():
+    notebooks.push(
+      RunKit.createNotebook({
+        element: codeContainer.querySelector('section'),
+        source: code,
+        onLoad: notebook -> notebook.evaluate()
+      })
+    )
+  else:
+    for idx i, elem element in document.querySelectorAll('.runButton'):
+      if element.isSameNode(e.currentTarget):
+        notebooks[i].setSource(code)
+        notebooks[i].evaluate()
+
+  e.currentTarget.textContent = 'Re-Run'
+  e.currentTarget.previousElementSibling.style.right = '116px'
+
+enhance = compose(
+  pure
+  withPropsFromObservables! (props) ->
+    ({
+      compiled: props.fixture.compiled$
+    })
+)
+
+RunButton = enhance(RunButton(props) ->
+  code = props.compiled?.js
+  <Button
+    raised
+    ripple
+    disabled={not code}
+    className="runButton"
+    style={{ position: 'absolute', top: 5, right: 20 }}
+    onClick={ e -> if code: run(e, code)}
+  >
+    Run
+  </Button>
+)
+
+export default RunButton

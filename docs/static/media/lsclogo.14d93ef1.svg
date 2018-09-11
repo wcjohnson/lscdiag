@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256px" height="256px" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>lsclogo</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="lsclogo">
+            <g id="Page-1">
+                <rect id="Rectangle" fill="#455861" fill-rule="nonzero" x="0" y="0" width="256" height="256" rx="20"></rect>
+                <path d="M101.04,102.072 C75.408,102.072 62.448,122.52 53.52,140.376 L71.952,149.592 C79.44,135.768 87.792,125.4 100.176,125.4 C118.32,125.4 128.688,154.2 155.76,154.2 C181.104,154.2 194.064,134.328 203.28,116.184 L184.848,106.968 C177.36,120.792 168.432,130.872 156.624,130.872 C139.056,130.872 129.84,102.072 101.04,102.072 Z" id="~" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>
