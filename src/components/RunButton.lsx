@@ -13,7 +13,7 @@ moreFixturesThanRunkitEmbeds() ->
 
 run(e, code) ->
   codeContainer = e.currentTarget.parentNode
-
+  console.log('foo')
   if moreFixturesThanRunkitEmbeds():
     notebooks.push(
       RunKit.createNotebook({
