@@ -12,24 +12,24 @@ moreFixturesThanRunkitEmbeds() ->
     document.querySelectorAll('#js').length
 
 run(e, code) ->
-  codeContainer = e.currentTarget.parentNode
+  runButtonElem = e.currentTarget
 
   if moreFixturesThanRunkitEmbeds():
     notebooks.push(
       RunKit.createNotebook({
-        element: codeContainer.querySelector('section'),
+        element: runButtonElem.previousElementSibling.previousElementSibling,
         source: code,
         onLoad: notebook -> notebook.evaluate()
       })
     )
   else:
     for idx i, elem element in document.querySelectorAll('.runButton'):
-      if element.isSameNode(e.currentTarget):
+      if element.isSameNode(runButtonElem):
         notebooks[i].setSource(code)
         notebooks[i].evaluate()
 
-  e.currentTarget.textContent = 'Re-Run'
-  e.currentTarget.previousElementSibling.style.right = '116px'
+  runButtonElem.textContent = 'Re-Run'
+  runButtonElem.previousElementSibling.style.right = '104px'
 
 enhance = compose(
   pure
@@ -44,9 +44,15 @@ RunButton = enhance(RunButton(props) ->
   <Button
     raised
     ripple
-    disabled={not code}
     className="runButton"
-    style={{ position: 'absolute', top: 5, right: 20 }}
+    style={{
+      position: 'absolute',
+      top: 5,
+      right: 26,
+      height: 32,
+      minWidth: 20,
+      fontSize: 10
+     }}
     onClick={ e -> if code: run(e, code)}
   >
     Run

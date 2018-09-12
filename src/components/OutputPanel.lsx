@@ -48,7 +48,14 @@ OutputPanel = compose(
     <section>
       <Subcomponent fixture={props.fixture} />
     </section>
-    <Button raised ripple style={{position: 'absolute', top: 5, right: 96}} onClick={props.duplicate}>Duplicate</Button>
+    <Button raised ripple style={{
+        position: 'absolute',
+        top: 5,
+        right: 86,
+        height: 32,
+        minWidth: 20,
+        fontSize: 10
+      }} onClick={props.duplicate}>Duplicate</Button>
     <RunButton raised ripple fixture={props.fixture}/>
   </div>
 )
