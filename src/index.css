@@ -3,3 +3,15 @@ body {
   padding: 0;
   font-family: "Fira Sans","Helvetica Neue","Helvetica","Arial","sans-serif";
 }
+
+iframe[src^="https://runkit.com/e"]{
+  width: calc(100% + 170px) !important;
+}
+
+@media (max-width: 1136px) and (min-width: 480px){
+  .mdl-cell--6-col, .mdl-cell--6-col-tablet.mdl-cell--6-col-tablet {
+      width: calc(95% - 16px);
+  }
+}
+
+

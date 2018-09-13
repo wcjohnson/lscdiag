@@ -2,7 +2,12 @@
 import { ReduxComponent, action, selector } from 'redux-components'
 { assign } = Object
 
-initialState = { compiler: 'latest' }
+// ES6 imports are not yet supported in Runkit, so gotta use 'useRequire'
+initialState = {
+  compiler: 'latest',
+  plugins: ['transform-flow-strip-types']
+  features: ['useRequire']
+}
 
 export default class Config extends ReduxComponent:
   static verbs = ['SET_COMPILER', 'SET_FEATURES', 'SET_PLUGINS', 'SET_OPTIONS']

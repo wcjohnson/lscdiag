@@ -19,4 +19,9 @@ addPlugin(
   require("./flat/node_modules/babel-plugin-transform-decorators-legacy").default
 );
 
+addPlugin(
+  "transform-flow-strip-types",
+  require("./flat/node_modules/babel-plugin-transform-flow-strip-types")
+);
+
 module.exports = plugins;

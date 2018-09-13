@@ -3,10 +3,6 @@
     "es5"
   ],
   "rules": {
-    "linebreak-style": [
-      2,
-      "unix"
-    ],
     "no-console": 0
   },
   "parserOptions": {
