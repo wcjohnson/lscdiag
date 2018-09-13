@@ -12,10 +12,6 @@ import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
 import plugins from '../utils/plugins'
 
-// We don't want this in the config because we don't want the user to
-// disable it as it will break the output in Runkit
-delete plugins['transform-flow-strip-types']
-
 PluginSelector({value, onChange}) ->
   <CheckGroup value={value} onChange={onChange}>
     {[for key id in plugins:

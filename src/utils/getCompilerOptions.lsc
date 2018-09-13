@@ -8,9 +8,6 @@ export default getCompilerOptions(compiler, config) ->
     ]
   }
 
-  // We always want to strip types now so it runs in Runkit
-  opts.plugins.push('transform-flow-strip-types')
-
   compilerPluginOpts = {}
 
   if config.features:
