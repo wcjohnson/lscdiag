@@ -13,7 +13,6 @@ import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
 import TranspiledOutput from './TranspiledOutput'
 import AstOutput from './AstOutput'
-import RunButton from './RunButton'
 
 NYI() -> <div>NYI</div>
 
@@ -48,15 +47,7 @@ OutputPanel = compose(
     <section>
       <Subcomponent fixture={props.fixture} />
     </section>
-    <Button raised ripple style={{
-        position: 'absolute',
-        top: 5,
-        right: 86,
-        height: 32,
-        minWidth: 20,
-        fontSize: 10
-      }} onClick={props.duplicate}>Duplicate</Button>
-    <RunButton raised ripple fixture={props.fixture}/>
+    <Button raised ripple style={{ position: 'absolute', top: 5, right: 20 }} onClick={props.duplicate}>Duplicate</Button>
   </div>
 )
 
