@@ -4,19 +4,20 @@
     "react"
   ],
   "rules": {
-    "linebreak-style": [
-      2,
-      "unix"
-    ],
     "no-console": 0,
     "react/prop-types": 0
   },
   "parserOptions": {
     "sourceType": "module"
   },
+  "globals": {
+    "RunKit": true
+  },
   "env": {
     "mocha": true,
-    "shared-node-browser": true
+    "shared-node-browser": true,
+    "browser": true,
+    "node": true
   },
   "extends": [
     "eslint:recommended",
