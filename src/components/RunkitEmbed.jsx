@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import debounce from 'just-debounce'
+import debounce from 'debounce-fn'
 
 class RunkitEmbed extends Component {
 	updateNotebook = debounce(() => {
 		this.notebook.setSource(this.props.source)
 		this.notebook.evaluate()
-	}, 800)
+	}, {wait: 800})
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate() {
 		if (!this.props.source) return
 		this.updateNotebook()
 	}
