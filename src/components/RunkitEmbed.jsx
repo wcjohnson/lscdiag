@@ -21,6 +21,11 @@ class RunkitEmbed extends Component {
     })
 	}
 
+	componentWillUnmount() {
+		this.notebook.destroy()
+		this.notebook = null
+	}
+
 	render() {
 		return (
 			<div ref='notebook' />
