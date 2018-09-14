@@ -4,7 +4,6 @@ import pure from 'recompose/pure'
 import compose from 'recompose/compose'
 import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
-// import { CodeEditor } from './CodeEditor'
 import RunkitEmbed from './RunkitEmbed.jsx'
 import LOC from './LOC'
 
