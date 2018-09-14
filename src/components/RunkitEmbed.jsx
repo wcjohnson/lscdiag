@@ -16,7 +16,7 @@ class RunkitEmbed extends Component {
 	componentDidMount() {
 		this.notebook = RunKit.createNotebook({
       element: this.embedContainer,
-			...this.props,
+      ...this.props,
     })
 	}
 
