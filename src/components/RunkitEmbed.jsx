@@ -1,19 +1,26 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import debounce from 'just-debounce'
+
 class RunkitEmbed extends Component {
-	componentDidUpdate() {
-		if (!this.props.source) return
+	updateNotebook = debounce(() => {
 		this.notebook.setSource(this.props.source)
 		this.notebook.evaluate()
+	}, 800)
+
+	componentDidUpdate(prevProps) {
+		if (!this.props.source) return
+		this.updateNotebook()
 	}
+
 	componentDidMount() {
 		this.notebook = RunKit.createNotebook({
       element: this.refs.notebook,
 			...this.props,
-      onLoad: notebook => notebook.evaluate(),
     })
 	}
+
 	render() {
 		return (
 			<div ref='notebook' />
@@ -38,6 +45,7 @@ RunkitEmbed.propTypes = {
 
 RunkitEmbed.defaultProps = {
   title: 'LightScript Compiler Output',
+	onLoad: notebook => notebook.evaluate(),
 }
 
 export default RunkitEmbed
