@@ -50,7 +50,7 @@ RunkitEmbed.propTypes = {
 
 RunkitEmbed.defaultProps = {
   title: 'LightScript Compiler Output',
-	onLoad: notebook => notebook.evaluate(),
+  onLoad: notebook => notebook.evaluate(),
 }
 
 export default RunkitEmbed
