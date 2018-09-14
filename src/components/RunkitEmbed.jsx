@@ -16,7 +16,7 @@ class RunkitEmbed extends Component {
 
 	componentDidMount() {
 		this.notebook = RunKit.createNotebook({
-      element: this.refs.notebook,
+      element: this.embedContainer,
 			...this.props,
     })
 	}
@@ -28,7 +28,7 @@ class RunkitEmbed extends Component {
 
 	render() {
 		return (
-			<div ref='notebook' />
+			<div ref={(el) => this.embedContainer = el} />
 		)
 	}
 }
