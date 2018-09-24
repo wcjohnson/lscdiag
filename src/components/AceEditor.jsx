@@ -37,7 +37,6 @@ export default class ReactAce extends Component {
 
   componentDidMount() {
     const {
-      name,
       className,
       onBeforeLoad,
       mode,

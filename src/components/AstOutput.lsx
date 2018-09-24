@@ -51,7 +51,7 @@ AstOutput = compose(
     }
     {if props.data?.entries:
       <ol>
-        {[for elem entry in props.data.entries: entry.component]}
+        {...for elem entry in props.data.entries: entry.component}
       </ol>
     }
   </div>

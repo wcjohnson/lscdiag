@@ -1,14 +1,14 @@
 export traverse(rootNode, enter, exit, k, i) ->
   enter(rootNode, k, i)
-  if rootNode?:
-    for const key in rootNode:
-      if key[0] === "_": continue
-      val = rootNode[key]
+  if rootNode~looseNotEq(null):
+    for k in rootNode:
+      if k[0] === "_": continue
+      val = rootNode[k]
       if val:
         if val.type:
-          traverse(val, enter, exit, key);
+          traverse(val, enter, exit, k)
         elif Array.isArray(val):
-          for idx i, elem x in val: traverse(x, enter, exit, key, i)
+          for idx i, elem x in val: traverse(x, enter, exit, k, i)
   exit(rootNode, k, i)
 
 export flatten(rootNode, finishNode) ->

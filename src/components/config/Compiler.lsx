@@ -22,10 +22,10 @@ FeatureSelector = pure! FeatureSelector({compiler, value, onChange}) ->
     value={value} onChange={onChange}
     style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', width: '100%'}}
   >
-    {[for key id, val entry in compiler.metadata.options:
+    {...for key id, val entry in compiler.metadata.options:
       if entry.valueType == "boolean":
         <CompilerToggleEntry value={id} key={id} optionName={id} option={entry} />
-    ]}
+    }
   </CheckGroup>
 
 CompilerToggleEntry({option, value, optionName, checked, onChange}) ->
@@ -57,21 +57,21 @@ ChildContainer({children}) ->
 
 CompilerSelector({value, onChange}) ->
   <RadioGroup container={RadioContainer} childContainer={ChildContainer} name="compiler" value={value} onChange={onChange}>
-    {[for key id in compilers:
+    {...for key id in compilers:
       <Radio key={id} value={id} ripple>{id}</Radio>
-    ]}
+    }
   </RadioGroup>
 
 CompilerOptionEntry({optionName, option, value, onChange}) ->
   <RadioGroup container="div" childContainer="div" name={`option${optionName}`} value={value} onChange={onChange}>
-    {[for elem id in option.options:
+    {...for elem id in option.options:
       <Radio key={id} value={id} ripple>{id}</Radio>
-    ]}
+    }
   </RadioGroup>
 
 OptionSelector = pure! OptionSelector({compiler, value, onChange}) ->
   <div>
-    {[for key id, val option in compiler.metadata.options:
+    {...for key id, val option in compiler.metadata.options:
       if option.valueType == "option" and option.options:
         // Assign the option's value to its id key in the settings.
         optionOnChange = (e) ->
@@ -88,7 +88,7 @@ OptionSelector = pure! OptionSelector({compiler, value, onChange}) ->
             <div><strong>Experimental</strong> (Stage: {option.stage})</div>
           }
         </div>
-    ]}
+    }
   </div>
 
 CompilerConfig = compose(

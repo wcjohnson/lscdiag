@@ -32,7 +32,7 @@ Fixture = withSubtree(-> ({
 )
 
 Fixtures = ComponentList(-> Fixture)
-export fixtures = new Fixtures
+export fixtures = new Fixtures()
 
 export addFixture() ->
   fixtures.push(true)
