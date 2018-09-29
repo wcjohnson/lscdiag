@@ -120,8 +120,8 @@ export default class ReactAce extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const oldProps = this.props;
+  componentDidUpdate(oldProps) {
+    const nextProps = this.props;
 
     for (let i = 0; i < editorOptions.length; i++) {
       const option = editorOptions[i];

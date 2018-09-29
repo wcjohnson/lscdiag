@@ -14,8 +14,6 @@ import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 import TranspiledOutput from './TranspiledOutput'
 import AstOutput from './AstOutput'
 
-NYI() -> <div>NYI</div>
-
 componentForTab = [
   TranspiledOutput
   AstOutput

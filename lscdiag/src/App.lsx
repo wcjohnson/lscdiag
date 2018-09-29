@@ -11,6 +11,7 @@ import {
 } from 'react-router-dom'
 
 // ensure state initializes before we try to render.
+// eslint-disable-next-line no-unused-vars
 import tree from './state'
 
 // compute base pathname

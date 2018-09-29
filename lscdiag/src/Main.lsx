@@ -26,6 +26,8 @@ import lscLogo from './images/lsclogo.svg'
 
 colorized = {
   color: '#455861'
+  "border-width": 0
+  "background-color": "rgba(1,1,1,0)"
 }
 
 Main = compose(
@@ -59,24 +61,24 @@ Main = compose(
       style={{backgroundColor: '#DAF3FF', color: '#455861'}}
       title={
         <span className="applyFont">
-          <img src={lscLogo} width="35" style={{marginRight: '0.75em', position: 'relative', bottom: 2}} />
+          <img src={lscLogo} width="35" style={{marginRight: '0.75em', position: 'relative', bottom: 2}} alt='' />
           lscdiag
         </span>
       }
     >
       <Navigation>
-        <a href="#" style={colorized} onClick={props.reset}>
+        <button style={colorized} onClick={props.reset}>
           <i className="material-icons spaceRight">layers_clear</i>
           Reset
-        </a>
-        <a href="#" style={colorized} onClick={props.addFixture}>
+        </button>
+        <button style={colorized} onClick={props.addFixture}>
           <i className="material-icons spaceRight">add</i>
           Add Fixture
-        </a>
-        <a href="#" style={colorized} onClick={props.openDialog}>
+        </button>
+        <button style={colorized} onClick={props.openDialog}>
           <i className="material-icons spaceRight">link</i>
           Permalink
-        </a>
+        </button>
       </Navigation>
     </Header>
     <Content>
