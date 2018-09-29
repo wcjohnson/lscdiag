@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "babel-plugin-lightscript": "0.5.9",
-    "babylon-lightscript": "0.5.9"
-  }
-}
