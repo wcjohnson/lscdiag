@@ -1,0 +1,3 @@
+[submodule "lightscript-compiler-platform"]
+	path = lightscript-compiler-platform
+	url = https://github.com/wcjohnson/lightscript-compiler-platform.git
