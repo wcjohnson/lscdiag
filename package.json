@@ -22,7 +22,8 @@
     "recompose": "^0.23.1",
     "redux": "^3.6.0",
     "redux-components": "^0.4.6",
-    "redux-components-list": "^0.4.7"
+    "redux-components-list": "^0.4.7",
+    "debounce-fn": "^1.0.0"
   },
   "devDependencies": {
     "@lightscript/babel-preset": "4.0.0-alpha.12",
