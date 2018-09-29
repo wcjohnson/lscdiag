@@ -1,4 +1,4 @@
-# lscdiag
+# @lightscript/lscdiag
 
 A static React web app for diagnosing the output of the [LightScript](http://www.lightscript.org/) compiler suite.
 

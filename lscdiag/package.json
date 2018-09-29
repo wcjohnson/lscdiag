@@ -10,7 +10,6 @@
     "hawks": "^0.1.4",
     "observable-utils": "^0.1.4",
     "pako": "^1.0.5",
-    "@oigroup/prettier-babylon": "^1.4.5",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-mdl": "^1.10.0",
