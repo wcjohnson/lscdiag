@@ -13,7 +13,7 @@ Tree = withSubtree(-> ({fixtures}))(
     get(state) -> state
 )
 
-tree = new Tree
+tree = new Tree()
 
 export store = if typeof window != 'undefined' and window:
   createStore( x -> x, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() )

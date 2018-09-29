@@ -13,10 +13,10 @@ export AstEntry({indentLevel, description, onActivateNode, isActive, isWarning, 
 
 export AstProps({node}) ->
   <div>
-    {[for key k, val v in node:
+    {...for key k, val v in node:
         if v != null and (not v.type) and (not Array.isArray(v)):
           <div key={k}><strong>{k}</strong> {JSON.stringify(v)}</div>
-    ]}
+    }
   </div>
 
 export entryForNode(node, isActive, onActivateNode) ->

@@ -14,9 +14,9 @@ import plugins from '../utils/plugins'
 
 PluginSelector({value, onChange}) ->
   <CheckGroup value={value} onChange={onChange}>
-    {[for key id in plugins:
+    {...for key id in plugins:
       <Checkbox key={id} label={id} value={id} ripple />
-    ]}
+    }
   </CheckGroup>
 
 ConfigInput = compose(
