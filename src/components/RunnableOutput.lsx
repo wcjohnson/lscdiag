@@ -1,0 +1,37 @@
+import React from 'react'
+
+import pure from 'recompose/pure'
+import compose from 'recompose/compose'
+import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
+
+import RunkitEmbed from './RunkitEmbed'
+import { CodeEditor } from './CodeEditor'
+import LOC from './LOC'
+
+enhance = compose(
+  pure
+  withPropsFromObservables! (props) ->
+    ({
+      compiled: props.fixture.compiled$
+    })
+)
+
+TranspiledOutput = enhance(TranspiledOutput(props) ->
+  code = props.compiled?.js or props.compiled?.errorMessage
+  hasError = !!(props.compiled?.errorMessage)
+
+  <div>
+    <LOC code={code} />
+    {
+      if hasError:
+        <CodeEditor name="js" code={code} syntax="jsx" readOnly />
+      else:
+        <RunkitEmbed
+          name="runkitEmbed"
+          source={code}
+        />
+    }
+  </div>
+)
+
+export default TranspiledOutput

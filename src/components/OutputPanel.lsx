@@ -11,13 +11,13 @@ import renderComponent from 'recompose/renderComponent'
 import withConstHandlers from 'hawks/lib/withConstHandlers'
 import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
-import TranspiledOutput from './TranspiledOutput'
+import RunnableOutput from './RunnableOutput'
 import AstOutput from './AstOutput'
-
-NYI() -> <div>NYI</div>
+import TranspiledOutput from './TranspiledOutput'
 
 componentForTab = [
   TranspiledOutput
+  RunnableOutput
   AstOutput
 ]
 
@@ -42,6 +42,7 @@ OutputPanel = compose(
       ripple
     >
       <Tab>Transpiled</Tab>
+      <Tab>Runnable</Tab>
       <Tab>Ast</Tab>
     </Tabs>
     <section>
