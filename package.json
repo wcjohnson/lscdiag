@@ -4,11 +4,15 @@
   "homepage": "https://wcjohnson.github.io/lscdiag",
   "version": "0.1.0",
   "dependencies": {
-    "lerna": "^2.1.0"
+    "lerna": "^3.4.0"
   },
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node --max_old_space_size=4096 scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
-  }
+  },
+  "workspaces": [
+    "lightscript-compiler-platform",
+    "lscdiag"
+  ]
 }
