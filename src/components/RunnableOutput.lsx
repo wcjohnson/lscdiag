@@ -1,0 +1,38 @@
+import React from 'react'
+
+import pure from 'recompose/pure'
+import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
+import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
+
+import RunkitEmbed from './RunkitEmbed'
+import { CodeEditor } from './CodeEditor'
+import LOC from './LOC'
+
+enhance = compose(
+  pure
+  withProps! { _storage: { lastValidCode: '' } }
+  withPropsFromObservables! (props) ->
+    ({
+      compiled: props.fixture.compiled$
+    })
+  withProps! (props) ->
+    if props.compiled?.js: props._storage.lastValidCode = props.compiled.js
+    { lastValidCode: props._storage.lastValidCode }
+)
+
+TranspiledOutput = enhance(TranspiledOutput(props) ->
+  code = props.compiled?.js or props.compiled?.errorMessage
+  hasError = !!(props.compiled?.errorMessage)
+
+  <div>
+    <LOC code={code} />
+    {
+      if hasError:
+        <CodeEditor name="js" code={code} syntax="jsx" readOnly />
+    }
+    <RunkitEmbed name="runkitEmbed" source={props.lastValidCode or ''} />
+  </div>
+)
+
+export default TranspiledOutput
