@@ -10,7 +10,7 @@ import pure from 'recompose/pure'
 import withConstHandlers from 'hawks/lib/withConstHandlers'
 import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
-import plugins from '../utils/plugins'
+plugins = {}
 
 PluginSelector({value, onChange}) ->
   <CheckGroup value={value} onChange={onChange}>

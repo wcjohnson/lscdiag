@@ -11,7 +11,7 @@ import pure from 'recompose/pure'
 import withConstHandlers from 'hawks/lib/withConstHandlers'
 import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
-import compilers from '../../utils/compilers'
+compilers = {}
 
 // Monkey-patch to silence incorrect propTypes errors
 delete RadioGroup.propTypes.container

@@ -2,14 +2,13 @@ import combineLatest$ from 'observable-utils/lib/combineLatest'
 import map$ from 'observable-utils/lib/map'
 import toBehaviorSubject$ from 'observable-utils/lib/toBehaviorSubject'
 
-import compilers from '../utils/compilers'
 import createMarker from '../utils/createMarker'
 import getCompilerOptions from '../utils/getCompilerOptions'
 
 export default compiled$(fixture) ->
   combineLatest$([fixture.source.code, fixture.config.get])
   ~map$(([source, config]) ->
-    compiler = compilers[config.compiler]
+    compiler = null
     if not compiler: return {
       lsc: ''
       errorMessage: 'Invalid compiler setting'

@@ -1,3 +1,0 @@
-import compilers from '../../compilers'
-
-export default compilers
