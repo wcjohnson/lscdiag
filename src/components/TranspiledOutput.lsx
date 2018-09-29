@@ -4,7 +4,7 @@ import pure from 'recompose/pure'
 import compose from 'recompose/compose'
 import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
-import { CodeEditor } from './CodeEditor'
+import RunkitEmbed from './RunkitEmbed.jsx'
 import LOC from './LOC'
 
 enhance = compose(
@@ -16,15 +16,13 @@ enhance = compose(
 )
 
 TranspiledOutput = enhance(TranspiledOutput(props) ->
-  code = props.compiled?.js or props.compiled?.errorMessage
+  code = props.compiled?.js
 
   <div>
     <LOC code={code} />
-    <CodeEditor
-      name="js"
-      code={code}
-      syntax="jsx"
-      readOnly
+    <RunkitEmbed
+      name="runkitEmbed"
+      source={code}
     />
   </div>
 )
