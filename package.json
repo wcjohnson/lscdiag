@@ -11,8 +11,11 @@
     "build": "node --max_old_space_size=4096 scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
-  "workspaces": [
-    "lightscript-compiler-platform",
-    "lscdiag"
-  ]
+  "workspaces": {
+    "packages": [
+      "lightscript-compiler-platform",
+      "lscdiag"
+    ],
+    "nohoist": ["**/eslint"]
+  }
 }
