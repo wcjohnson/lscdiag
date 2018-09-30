@@ -26,8 +26,8 @@ import lscLogo from './images/lsclogo.svg'
 
 colorized = {
   color: '#455861'
-  "border-width": 0
-  "background-color": "rgba(1,1,1,0)"
+  borderWidth: 0
+  backgroundColor: "rgba(1,1,1,0)"
 }
 
 Main = compose(
