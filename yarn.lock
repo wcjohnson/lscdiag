@@ -1447,7 +1447,7 @@
     "@babel/plugin-transform-flow-strip-types" "^7.0.0"
     "@lightscript/transform" "4.0.0-alpha.13"
 
-"@lightscript/eslint-plugin@4.0.0-alpha.13", "@lightscript/eslint-plugin@^4.0.0-alpha.13":
+"@lightscript/eslint-plugin@^4.0.0-alpha.13":
   version "4.0.0-alpha.13"
   resolved "https://registry.yarnpkg.com/@lightscript/eslint-plugin/-/eslint-plugin-4.0.0-alpha.13.tgz#138bbcd6b66d3bb128d284361c157556a7e4737b"
   integrity sha512-urQeznwdPZbr3MVzAEcgZ2ZAl2RyMkrCtl26KjKY4cwLbwljoHC4NzTs9rINhArAICwvaTyiulpfuAO6Raoibg==
@@ -1499,10 +1499,10 @@
   dependencies:
     core-js "^2.0.0"
 
-"@ormojo/fobs@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@ormojo/fobs/-/fobs-1.0.5.tgz#c0e72fc1b7d0b159f66765c20f1c7285ad08a25b"
-  integrity sha512-VlZfzV9HX78F+ZtMFhU/6CMwU6XoPZro3Kmt1fSfDR5XDDWvjxAe3s/rz02DaSVKQBP3YBZlhVyHNwkNtHKRFw==
+"@ormojo/fobs@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@ormojo/fobs/-/fobs-1.0.6.tgz#59503fc2ae9889d6bd62ab930331f1c7e9de04e6"
+  integrity sha512-0BH9dsnBvpzxY3szdWwRNsyImen2qOILcVd2tra9/Z+rmCwka07JhohCQXcvo8IhDqlUPfk4NKzW7H4XKIihQg==
   dependencies:
     symbol-observable "^1.1.0"
 
@@ -8013,7 +8013,7 @@ object.values@^1.0.4:
     function-bind "^1.1.0"
     has "^1.0.1"
 
-observable-utils@^0.1.4, observable-utils@^0.1.9:
+observable-utils@^0.1.9:
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/observable-utils/-/observable-utils-0.1.10.tgz#71285b0f6d38f59e34b6f45183d78d047884556f"
   integrity sha1-cShbD2049Z40tvRRg9eNBHiEVW8=
@@ -10683,11 +10683,6 @@ symbol-tree@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
   integrity sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=
-
-systemjs@^0.21.5:
-  version "0.21.5"
-  resolved "https://registry.yarnpkg.com/systemjs/-/systemjs-0.21.5.tgz#2fcef4edfe744003da4787f3f3d45d73f94462d2"
-  integrity sha512-GWzZhN/x7Fsae2CYkz2GF7OgOS+YDgKulcgd5L1kTogZHMKDrPx5T8zI8I0y5RoU9Dx78Z7j1XMfuFa1thD84A==
 
 table@^4.0.3:
   version "4.0.3"

@@ -6,8 +6,7 @@ import withConstHandlers from 'hawks/lib/withConstHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 
-import map from 'observable-utils/lib/map'
-import combineLatest from 'observable-utils/lib/combineLatest'
+import { map, combineLatest } from '@ormojo/fobs'
 
 import { createMarker } from './CodeEditor'
 import { buildFlatTree } from '../utils/traverse'

@@ -1,13 +1,11 @@
-import combineLatest$ from 'observable-utils/lib/combineLatest'
-import map$ from 'observable-utils/lib/map'
-import toBehaviorSubject$ from 'observable-utils/lib/toBehaviorSubject'
+import { combineLatest, map, toBehaviorSubject } from '@ormojo/fobs'
 
 import createMarker from '../utils/createMarker'
 import getCompilerOptions from '../utils/getCompilerOptions'
 
 export default parsed$(fixture) ->
-  combineLatest$([fixture.source.code, fixture.config.get])
-  ~map$(([source, config]) ->
+  combineLatest([fixture.source.code, fixture.config.get])
+  ~map(([source, config]) ->
     compiler = null
     if not compiler: return {
       errorMessage: 'Invalid compiler setting'
@@ -24,4 +22,4 @@ export default parsed$(fixture) ->
       fixture.errorMarkers$.next(null)
     result
   )
-  ~toBehaviorSubject$()
+  ~toBehaviorSubject()

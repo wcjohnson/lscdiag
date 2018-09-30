@@ -16,7 +16,13 @@ enhance = compose(
 )
 
 TranspiledOutput = enhance(TranspiledOutput(props) ->
-  code = props.compiled?.js or props.compiled?.errorMessage
+  compiled = props.compiled
+  code = if compiled?.code:
+    compiled.code
+  elif compiled?.error:
+    compiled.error.message
+  else:
+    ''
 
   <div>
     <LOC code={code} />

@@ -1,9 +1,6 @@
 // Allows intermediate compilation processes to insert markers into the source
 // code by writing to this observable.
-import createBehaviorSubject from 'observable-utils/lib/createBehaviorSubject'
-import toBehaviorSubject from 'observable-utils/lib/toBehaviorSubject'
-import combineLatest from 'observable-utils/lib/combineLatest'
-import map from 'observable-utils/lib/map'
+import { createBehaviorSubject, toBehaviorSubject, combineLatest, map } from '@ormojo/fobs'
 
 export default createMarkers$() ->
   errorMarkers$ = createBehaviorSubject()

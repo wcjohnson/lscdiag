@@ -3,12 +3,13 @@
   "homepage": "https://wcjohnson.github.io/lscdiag",
   "version": "0.1.0",
   "dependencies": {
+    "@lightscript/compiler-platform": "^0.1.0",
     "@lightscript/runtime": "^0.1.1",
+    "@ormojo/fobs": "^1.0.6",
     "base64-url": "^1.3.3",
     "brace": "^0.10.0",
     "copy-to-clipboard": "^3.0.6",
     "hawks": "^0.1.4",
-    "observable-utils": "^0.1.4",
     "pako": "^1.0.5",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
@@ -22,7 +23,7 @@
   },
   "devDependencies": {
     "@lightscript/babel-preset": "4.0.0-alpha.13",
-    "@lightscript/eslint-plugin": "4.0.0-alpha.13",
+    "@lightscript/eslint-plugin": "^4.0.0-alpha.13",
     "@babel/core": "7.1.0",
     "@babel/runtime": "7.0.0",
     "@babel/preset-env": "7.1.0",
