@@ -17,9 +17,14 @@ export cleanState = {
           selectedNode: null
         }
         config: {
-          source: {
-            type: 'remote'
-            url: 'https://wcjohnson.github.io/lightscript-compiler/modules/registry.js'
+          source: { type: 'toolchain' }
+          options: {
+            children: [{
+              source: {
+                type: 'remote'
+                url: 'https://wcjohnson.github.io/lightscript-compiler/modules/registry.js'
+              }
+            }]
           }
         }
       }
