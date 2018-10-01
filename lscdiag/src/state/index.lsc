@@ -1,6 +1,7 @@
 import { createStore } from 'redux'
 import { mountRootComponent, withSubtree, ReduxComponent, selector } from 'redux-components'
 import { fixtures } from './Fixture'
+import { cleanState } from './cleanState'
 
 Tree = withSubtree(-> ({fixtures}))(
   class Tree extends ReduxComponent:
@@ -22,6 +23,6 @@ else:
 
 mountRootComponent(store, tree)
 
-fixtures.push(true)
+store.dispatch({ type: 'RESET_APP_STATE', payload: cleanState })
 
 export default tree

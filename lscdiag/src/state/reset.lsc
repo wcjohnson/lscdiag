@@ -1,4 +1,5 @@
 import tree from '.'
+import { cleanState } from './cleanState'
 
 reallyReplaceAppState(state) ->
   // Discard existing fixtures
@@ -11,34 +12,5 @@ export replaceAppState(state) ->
   // Defer until out of React rendering cycles
   setTimeout(-> reallyReplaceAppState(state), 0)
 
-// A clean slate app state
-cleanSlate = {
-  fixtures: {
-    _map: {
-      '@@metadata': {
-        cj3v2yrkf00003k657l7ap3vt: true
-      }
-      cj3v2yrkf00003k657l7ap3vt: {
-        source: {
-          lsc: ''
-        }
-        ui: {
-          tabs: [
-            0
-            0
-          ]
-          selectedNode: null
-        }
-        config: {
-          compiler: 'latest'
-        }
-      }
-    }
-    list: [
-      'cj3v2yrkf00003k657l7ap3vt'
-    ]
-  }
-}
-
 export resetAppState() ->
-  replaceAppState(cleanSlate)
+  replaceAppState(cleanState)
