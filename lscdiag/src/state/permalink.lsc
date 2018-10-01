@@ -1,16 +1,22 @@
 import base64url from 'base64-url'
+// import msgpack5 from 'msgpack5'
 import pako from 'pako'
 import url from 'url'
 import { replaceAppState } from './reset'
 
+// msgpack = msgpack5()
+
 export createPermalink(state, origUrl) ->
-  deflated = pako.deflate(JSON.stringify(state), { to: 'string', level: 9 })
+  packed = JSON.stringify(state)
+  // packed = msgpack.encode(state)
+  console.log("permalinking to state", packed, " uncompressed length (bytes) ", packed.length)
+  deflated = pako.deflate(packed, { to: 'string', level: 9 })
   stateArg = base64url.encode(deflated)
 
   parsed = url.parse(origUrl)
   delete parsed.search
   parsed.query = {
-    v: 1
+    v: 2
     s: stateArg
   }
 
@@ -20,6 +26,17 @@ export createPermalink(state, origUrl) ->
 
 resolveVersion = {
   '1': (compressed) ->
+    let resolved, deflated, stringified
+    try:
+      now deflated = base64url.decode(compressed)
+      now stringified = pako.inflate(deflated, { to: 'string'})
+      now resolved = JSON.parse(stringified)
+    catch e:
+      null
+
+    resolved
+
+  '2': (compressed) ->
     let resolved, deflated, stringified
     try:
       now deflated = base64url.decode(compressed)
