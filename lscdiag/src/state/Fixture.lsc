@@ -5,6 +5,7 @@ import Source from './Source'
 import UI from './UI'
 import Config from './Config'
 import compiled$ from './compiled$'
+import toolchainCompiled$ from './toolchain$'
 import parsed$ from './parsed$'
 import markers$ from './markers$'
 
@@ -22,7 +23,7 @@ Fixture = withSubtree(-> ({
 
   componentWillMount() ->
     // Construct observables corresponding to this fixture.
-    this.compiled$ = compiled$(this)
+    this.compiled$ = toolchainCompiled$(this)
     this.parsed$ = parsed$(this)
     Object.assign(this, markers$(this))
 
