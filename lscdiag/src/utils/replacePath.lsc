@@ -1,0 +1,19 @@
+fastCopy(x) ->
+  if Array.isArray(x):
+    x.slice()
+  elif typeof x == 'object':
+    Object.assign({}, x)
+  else:
+    x
+
+export default replacePath(orig, path, value) ->
+  stop = path.length - 1
+  let current = fastCopy(orig)
+  result = current
+  for let i=0; i < stop; i++:
+    current[path[i]] = fastCopy(current[path[i]])
+    now current = current[path[i]]
+
+  current[path[path.length - 1]] = value
+
+  result

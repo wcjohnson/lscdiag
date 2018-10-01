@@ -1,4 +1,4 @@
-import { switchLatest, map, fromPromise, combineLatest, toBehaviorSubject, createConstant } from '@ormojo/fobs'
+import { switchLatest, map, fromPromise, combineLatest, toBehaviorSubject } from '@ormojo/fobs'
 import { InPlacePlatform } from '@lightscript/compiler-platform'
 import createMarker from '../utils/createMarker'
 
@@ -13,19 +13,19 @@ makeCaller() ->
   callTool(toolSpec, input) -/>
     try:
       if (toolSpec == previousSpec) and memoizedAction:
-        console.log("memoized")
         result <- memoizedAction.run(input)
         { descriptor: previousDescriptor, result }
       else:
-        console.log("pezzimized")
         tool <- platform.createTool(toolSpec)
         now previousSpec = toolSpec
         now previousDescriptor <- tool.describe(true)
+        console.log("toolchain regenerated, new descriptor", previousDescriptor)
         now memoizedAction <- tool.apply(null)
         result <- memoizedAction.run(input)
         { descriptor: previousDescriptor, result }
     catch err:
-      { toolchainError: err }
+      console.error("ToolchainError", err)
+      { result: { toolchainError: err } }
 
 toolchain$(obs) ->
   callTool = makeCaller()
@@ -35,21 +35,19 @@ toolchain$(obs) ->
     fromPromise(callTool(opts, input))
   ~switchLatest!
 
-defaultConfig = {
-  source: {
-    type: 'remote'
-    url: 'https://wcjohnson.github.io/lightscript-compiler/modules/registry.js'
-  }
-}
-
 export default toolchainCompiled$(fixture) ->
   combineLatest([
-    createConstant(defaultConfig)
+    fixture.config.get~map(x ->
+      console.log("pushing config to toolchain:", x)
+      x
+    )
     fixture.source.code~map(x -> { code: x })
   ])
   ~toolchain$()
   ~map! ({ descriptor, result }) ->
-    console.log("tool descriptor", descriptor)
+    // Feed the toolchain descriptor back to the fixture
+    if descriptor:
+      fixture.toolchainDescriptor$.next(descriptor)
     // If an error has a loc, create an error marker
     if result.error and result.error.loc:
       fixture.errorMarkers$.next([

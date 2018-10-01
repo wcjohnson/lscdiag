@@ -1,10 +1,12 @@
 import { ReduxComponent, withSubtree, action } from 'redux-components'
 import ComponentList from 'redux-components-list'
+import { createBehaviorSubject } from '@ormojo/fobs'
+import replacePath from '../utils/replacePath'
+import { simplifyConfig } from '@lightscript/compiler-platform'
 
 import Source from './Source'
 import UI from './UI'
 import Config from './Config'
-import compiled$ from './compiled$'
 import toolchainCompiled$ from './toolchain$'
 import parsed$ from './parsed$'
 import markers$ from './markers$'
@@ -23,9 +25,15 @@ Fixture = withSubtree(-> ({
 
   componentWillMount() ->
     // Construct observables corresponding to this fixture.
+    this.toolchainDescriptor$ = createBehaviorSubject()
     this.compiled$ = toolchainCompiled$(this)
-    this.parsed$ = parsed$(this)
+    this.parsed$ = parsed$(this) // XXX
     Object.assign(this, markers$(this))
+
+  setConfigAtPath(path, value): void ->
+    cur = simplifyConfig(this.toolchainDescriptor$.getValue())
+    next = replacePath(cur, path, value)
+    this.config.set(next)
 
   @action({isDispatcher: true})
   replaceState(nextState) ->

@@ -17,7 +17,10 @@ export cleanState = {
           selectedNode: null
         }
         config: {
-          compiler: 'latest'
+          source: {
+            type: 'remote'
+            url: 'https://wcjohnson.github.io/lightscript-compiler/modules/registry.js'
+          }
         }
       }
     }

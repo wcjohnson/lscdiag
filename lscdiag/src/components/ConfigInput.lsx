@@ -1,42 +1,19 @@
 import React from "react"
 
-import CheckGroup from './CheckGroup'
-import Checkbox from 'react-mdl/lib/Checkbox'
-import { Card, CardTitle, CardText } from 'react-mdl/lib/Card'
-import CompilerConfig from './config/Compiler.lsx'
+import { Tool } from './ToolConfig.lsx'
 
 import compose from 'recompose/compose'
 import pure from 'recompose/pure'
-import withConstHandlers from 'hawks/lib/withConstHandlers'
 import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
-
-plugins = {}
-
-PluginSelector({value, onChange}) ->
-  <CheckGroup value={value} onChange={onChange}>
-    {...for key id in plugins:
-      <Checkbox key={id} label={id} value={id} ripple />
-    }
-  </CheckGroup>
 
 ConfigInput = compose(
   pure
   withPropsFromObservables! props -> ({
-    config: props.fixture.config.get
+    config: props.fixture.toolchainDescriptor$
   })
-  withConstHandlers! {
-    setPlugins(props, plugins) ->
-      props.fixture.config.setPlugins(plugins)
-  }
 )((props) ->
   <div>
-    <CompilerConfig fixture={props.fixture} />
-    <Card shadow={0}  style={{margin: 5, width: '100%'}}>
-      <CardTitle>Babel Plugins</CardTitle>
-      <CardText>
-        <PluginSelector value={props.config.plugins} onChange={props.setPlugins} />
-      </CardText>
-    </Card>
+    <Tool descriptor={props.config} fixture={props.fixture} />
   </div>
 )
 

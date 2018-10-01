@@ -1,0 +1,83 @@
+/* eslint-disable react/require-render-return */
+// Display configuration for a CompilerPlatform tool
+import React from 'react'
+
+import RadioGroup from 'react-mdl/lib/RadioGroup'
+import Radio from 'react-mdl/lib/Radio'
+import Checkbox from 'react-mdl/lib/Checkbox'
+
+import { Card } from 'react-mdl/lib/Card'
+
+class OptionCheck extends React.Component:
+  onChange(ev) =>
+    this.props.fixture.setConfigAtPath(this.props.path, ev.target.checked)
+
+  render() ->
+    let {toolKey, optionDescription: { name, defaultValue, description }, optionValue: value } = this.props
+    now name = name or toolKey
+    now value = if value~looseEq(null): defaultValue else: value
+    checked = if value: true else: false
+
+    <div style={{width: '50%', marginTop: 10, marginBottom: 10}}>
+      <Checkbox
+        label={<span style={{fontWeight:'bold'}}>{name}</span>}
+        checked={checked}
+        onChange={this.onChange}
+        ripple
+      />
+      { if description:
+        <div>{description}</div>
+      }
+    </div>
+
+class OptionSelector extends React.Component:
+  onChange(ev) =>
+    this.props.fixture.setConfigAtPath(this.props.path, ev.target.value)
+
+  render() ->
+    let {toolKey, optionDescription: { name, options, defaultValue, description }, optionValue: value } = this.props
+    now name = name or toolKey
+    now value = if value~looseEq(null): defaultValue else: value
+
+    <div>
+      <div style={{fontSize: '16px', lineHeight: '24px', fontWeight: 'bold'}}>{name}</div>
+      { if description:
+        <div>{description}</div>
+      }
+      <RadioGroup container="div" childContainer="div" name={`option${toolKey}`} value={value or null} onChange={this.onChange} >
+        {...for elem id in options:
+          <Radio key={id} value={id} ripple>{id}</Radio>
+        }
+      </RadioGroup>
+    </div>
+
+ToolOption(props) ->
+  match props.optionDescription?.valueType:
+    | "option", "options":
+      <OptionSelector {...props} />
+    | "boolean":
+      <OptionCheck {...props} />
+    | else:
+      null
+
+export class Tool extends React.PureComponent:
+  render() ->
+    let { descriptor, path, fixture } = this.props
+    now path = path or []
+    options = descriptor.options or {}
+    metadata = descriptor._metadata or {}
+
+    <Card shadow={0} style={{margin: 5, padding: 5, width:'100%', minHeight: 'auto'}}>
+      <h5 style={{margin: 12}}>
+        {metadata.name or '(unknown)'}
+      </h5>
+      {...for key k, val v in metadata.possibleOptions or {}:
+        <ToolOption path={path.concat(['options', k])} key={k} toolKey={k} optionDescription={v} optionValue={options[k]} fixture={fixture} />
+      }
+      { if metadata.hasChildren:
+        <React.Fragment>{
+          ...for idx i, elem e in descriptor.options.children:
+            <Tool path={path.concat(['options', 'children', i])} key={i} descriptor={e} fixture={fixture} />
+        }</React.Fragment>
+      }
+    </Card>
