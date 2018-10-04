@@ -31,8 +31,6 @@ resolveVersion = {
       now deflated = base64url.decode(compressed)
       now stringified = pako.inflate(deflated, { to: 'string'})
       now resolved = JSON.parse(stringified)
-    catch e:
-      null
 
     resolved
 
@@ -42,8 +40,6 @@ resolveVersion = {
       now deflated = base64url.decode(compressed)
       now stringified = pako.inflate(deflated, { to: 'string'})
       now resolved = JSON.parse(stringified)
-    catch e:
-      null
 
     resolved
 }

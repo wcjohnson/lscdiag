@@ -6,6 +6,20 @@
  */
 'use strict';
 
+const path = require('path');
+
+const validateBoolOption = (name, value, defaultValue) => {
+  if (typeof value === 'undefined') {
+    value = defaultValue;
+  }
+
+  if (typeof value !== 'boolean') {
+    throw new Error(`Preset react-app: '${name}' option must be a boolean.`);
+  }
+
+  return value;
+};
+
 module.exports = function(api, opts) {
   if (!opts) {
     opts = {};
@@ -21,6 +35,21 @@ module.exports = function(api, opts) {
   var isEnvDevelopment = env === 'development';
   var isEnvProduction = env === 'production';
   var isEnvTest = env === 'test';
+
+  var areHelpersEnabled = validateBoolOption('helpers', opts.helpers, false);
+  var useAbsoluteRuntime = validateBoolOption(
+    'absoluteRuntime',
+    opts.absoluteRuntime,
+    true
+  );
+
+  var absoluteRuntimePath = undefined;
+  if (useAbsoluteRuntime) {
+    absoluteRuntimePath = path.dirname(
+      require.resolve('@babel/runtime/package.json')
+    );
+  }
+
   if (!isEnvDevelopment && !isEnvProduction && !isEnvTest) {
     throw new Error(
       'Using `babel-preset-react-app` requires that you specify `NODE_ENV` or ' +
@@ -31,7 +60,7 @@ module.exports = function(api, opts) {
     );
   }
 
-  var result = {
+  return {
     // Babel assumes ES Modules, which isn't safe until CommonJS
     // dies. This changes the behavior to assume CommonJS unless
     // an `import` or `export` is present in the file.
@@ -76,24 +105,23 @@ module.exports = function(api, opts) {
         require('@babel/plugin-transform-runtime').default,
         {
           corejs: false,
-          helpers: false,
+          helpers: areHelpersEnabled,
           regenerator: true,
           // https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
           // We should turn this on once the lowest version of Node LTS
           // supports ES Modules.
           useESModules: isEnvDevelopment || isEnvProduction,
+          // Undocumented option that lets us encapsulate our runtime, ensuring
+          // the correct version is used
+          // https://github.com/babel/babel/blob/090c364a90fe73d36a30707fc612ce037bdbbb24/packages/babel-plugin-transform-runtime/src/index.js#L35-L42
+          absoluteRuntime: absoluteRuntimePath,
         },
       ],
-      // function* () { yield 42; yield 43; }
-      !isEnvTest && [
-        require('@babel/plugin-transform-regenerator').default,
-        {
-          // Async functions are converted to generators by @babel/preset-env
-          async: false,
-        },
-      ],
+      // Adds syntax support for import()
+      require('@babel/plugin-syntax-dynamic-import').default,
+      isEnvTest &&
+        // Transform dynamic import to require
+        require('babel-plugin-transform-dynamic-import').default,
     ].filter(Boolean),
   };
-
-  return result;
 };

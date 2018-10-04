@@ -1,3 +1,26 @@
+/**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+// Inspired by https://github.com/airbnb/javascript but less opinionated.
+
+// We use eslint-loader so even warnings are very visible.
+// This is why we only use "WARNING" level for potential errors,
+// and we don't use "ERROR" level at all.
+
+// In the future, we might create a separate list of rules for production.
+// It would probably be more strict.
+
+// The ESLint browser environment defines all browser globals as valid,
+// even though most people don't know some of them exist (e.g. `name` or `status`).
+// This is dangerous as it hides accidentally undefined variables.
+// We blacklist the globals that we deem potentially confusing.
+// To use them, explicitly reference them, e.g. `window.name` or `window.status`.
+var restrictedGlobals = require('confusing-browser-globals');
+
 module.exports = {
   root: true,
 
@@ -26,17 +49,12 @@ module.exports = {
     },
   },
 
-  settings: {
-    react: {
-      version: "16.5"
-    }
-  },
-
   rules: {
     // http://eslint.org/docs/rules/
     'array-callback-return': 'warn',
     'default-case': ['warn', { commentPattern: '^no default$' }],
     'dot-location': ['warn', 'property'],
+    eqeqeq: ['warn', 'smart'],
     'new-parens': 'warn',
     'no-array-constructor': 'warn',
     'no-caller': 'warn',
@@ -64,6 +82,18 @@ module.exports = {
     'no-labels': ['warn', { allowLoop: true, allowSwitch: false }],
     'no-lone-blocks': 'warn',
     'no-loop-func': 'warn',
+    'no-mixed-operators': [
+      'warn',
+      {
+        groups: [
+          ['&', '|', '^', '~', '<<', '>>', '>>>'],
+          ['==', '!=', '===', '!==', '>', '>=', '<', '<='],
+          ['&&', '||'],
+          ['in', 'instanceof'],
+        ],
+        allowSamePrecedence: false,
+      },
+    ],
     'no-multi-str': 'warn',
     'no-native-reassign': 'warn',
     'no-negated-in-lhs': 'warn',
@@ -87,9 +117,17 @@ module.exports = {
     'no-this-before-super': 'warn',
     'no-throw-literal': 'warn',
     'no-undef': 'error',
-    'no-restricted-globals': 'error',
+    'no-restricted-globals': ['error'].concat(restrictedGlobals),
     'no-unexpected-multiline': 'warn',
     'no-unreachable': 'warn',
+    'no-unused-expressions': [
+      'error',
+      {
+        allowShortCircuit: true,
+        allowTernary: true,
+        allowTaggedTemplates: true,
+      },
+    ],
     'no-unused-labels': 'warn',
     'no-unused-vars': [
       'warn',
@@ -102,7 +140,8 @@ module.exports = {
       'warn',
       {
         functions: false,
-        classes: false
+        classes: false,
+        variables: false,
       },
     ],
     'no-useless-computed-key': 'warn',
@@ -120,6 +159,7 @@ module.exports = {
     'no-with': 'warn',
     'no-whitespace-before-property': 'warn',
     'require-yield': 'warn',
+    'rest-spread-spacing': ['warn', 'never'],
     strict: ['warn', 'never'],
     'unicode-bom': ['warn', 'never'],
     'use-isnan': 'warn',
@@ -162,7 +202,10 @@ module.exports = {
     'react/jsx-uses-react': 'warn',
     'react/jsx-uses-vars': 'warn',
     'react/no-danger-with-children': 'warn',
-    'react/no-deprecated': 'warn',
+    // Disabled because of undesirable warnings
+    // See https://github.com/facebook/create-react-app/issues/5204 for
+    // blockers until its re-enabled
+    // 'react/no-deprecated': 'warn',
     'react/no-direct-mutation-state': 'warn',
     'react/no-is-mounted': 'warn',
     'react/react-in-jsx-scope': 'error',
@@ -198,7 +241,5 @@ module.exports = {
     'flowtype/define-flow-type': 'warn',
     'flowtype/require-valid-file-annotation': 'warn',
     'flowtype/use-flow-type': 'warn',
-
-    '@lightscript/implicit-imports': 'warn'
-  }
-}
+  },
+};
