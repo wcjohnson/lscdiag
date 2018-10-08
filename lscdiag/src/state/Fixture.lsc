@@ -8,7 +8,6 @@ import Input from './Input'
 import UI from './UI'
 import Config from './Config'
 import toolchainOutput$ from './toolchain$'
-import markers$ from './markers$'
 
 Fixture = withSubtree(-> ({
   input: Input
@@ -27,10 +26,8 @@ Fixture = withSubtree(-> ({
     this.toolchainDescriptor$ = createBehaviorSubject()
     this.errors$ = createBehaviorSubject()
     this.output$ = toolchainOutput$(this)
-    //this.parsed$ = parsed$(this) // XXX
-    Object.assign(this, markers$(this))
 
-  setConfigAtPath(path, value): void ->
+  setConfigAtPath(path, value): void =>
     cur = simplifyConfig(this.toolchainDescriptor$.getValue())
     next = replacePath(cur, path, value)
     this.config.set(next)

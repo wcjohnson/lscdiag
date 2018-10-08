@@ -1,0 +1,99 @@
+/* eslint-disable react/require-render-return */
+// Display configuration for a CompilerPlatform tool
+import React from 'react'
+
+import { Segment, Checkbox, Dropdown, Header, Button } from 'semantic-ui-react'
+
+class OptionCheck extends React.Component:
+  onChange(ev, {checked}) =>
+    this.props.setter(this.props.path, checked)
+
+  render() ->
+    let {toolKey, optionDescription: { name, defaultValue, description }, optionValue: value } = this.props
+    now name = name or toolKey
+    now value = if value~looseEq(null): defaultValue else: value
+    checked = if value: true else: false
+
+    <div style={{marginTop: 10, marginBottom: 10}}>
+      <Checkbox
+        label={<label><span style={{fontWeight:'bold'}}>{name}</span></label>}
+        checked={checked}
+        onChange={this.onChange}
+      />
+      { if description:
+        <div>{description}</div>
+      }
+    </div>
+
+RadioGroupSelector({options, value, toolKey, onChange}) ->
+  [...for elem id in options:
+    [<div key={id}><Checkbox radio value={id} name={`option${toolKey}`}
+      label={id}
+      checked={value == id} onChange={onChange}
+    /></div>]
+  ]
+
+DropdownSelector({options, value, toolKey, onChange}) ->
+  ddOpts = [...for elem id in options: [{ text: id, value: id }]]
+  <Dropdown scrolling selection options={ddOpts} value={value} onChange={onChange} />
+
+class OptionSelector extends React.Component:
+  onChange(ev, {value}) =>
+    this.props.setter(this.props.path, value)
+
+  render() ->
+    let {toolKey, optionDescription: { name, options, defaultValue, description }, optionValue: value } = this.props
+    now name = name or toolKey
+    now value = if value~looseEq(null): defaultValue else: value
+
+    <div>
+      <div>
+        <span style={{fontSize: '16px', lineHeight: '24px', fontWeight: 'bold', marginRight: '10px'}}>
+          {name}
+        </span>
+        {if options.length > 5:
+          <DropdownSelector options={options} toolKey={toolKey} onChange={this.onChange}  value={value} />
+        }
+      </div>
+      { if description:
+        <div>{description}</div>
+      }
+      { if options.length <= 5:
+        <RadioGroupSelector options={options} toolKey={toolKey} onChange={this.onChange} value={value} />
+      }
+    </div>
+
+ToolOption(props) ->
+  match props.optionDescription?.valueType:
+    | "option", "options":
+      <OptionSelector {...props} />
+    | "boolean":
+      <OptionCheck {...props} />
+    | else:
+      null
+
+export class Tool extends React.PureComponent:
+  render() ->
+    let { descriptor, path, setter } = this.props
+    now path = path or []
+    options = descriptor?.options or {}
+    metadata = descriptor?._metadata or {}
+
+    <Segment>
+      <Header size='medium' as='h1'>
+        {metadata.name or '(unknown)'}
+      </Header>
+      {...for key k, val v in metadata.possibleOptions or {}:
+        <ToolOption path={path.concat(['options', k])} key={k} toolKey={k} optionDescription={v} optionValue={options[k]} setter={setter} />
+      }
+      { if metadata.hasChildren:
+        <React.Fragment>
+          {...for idx i, elem e in descriptor.options.children:
+            <Tool path={path.concat(['options', 'children', i])} key={i} descriptor={e} setter={setter} />
+          }
+          {if metadata.possibleOptions?.children?.mutable:
+            <Dropdown button fluid text="Add Tool" options={[]} />
+          }
+        </React.Fragment>
+      }
+    </Segment>

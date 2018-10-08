@@ -1,6 +1,6 @@
 {
   "name": "@lightscript/lscdiag",
-  "homepage": "https://wcjohnson.github.io/lscdiag",
+  "homepage": "https://wcjohnson.github.io/lscdiag-next",
   "version": "0.1.0",
   "dependencies": {
     "@lightscript/compiler-platform": "^0.1.0",

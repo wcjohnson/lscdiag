@@ -4,6 +4,12 @@ import { Observe, ObserveMany } from '@ormojo/react-observe'
 import { Menu } from 'semantic-ui-react'
 import './Gadget.css'
 import { deleteFixtureAtIndex, duplicateFixture } from '../../state/Fixture'
+import { Tool } from './ToolConfig'
+
+SettingsInput({fixture}) ->
+  <Observe pure source={fixture.toolchainDescriptor$}>{(config) ->
+    <Tool descriptor={config} setter={fixture.setConfigAtPath} />
+  }</Observe>
 
 Header({background, children}) ->
   <div className="Header" style={{background}}>
@@ -24,10 +30,26 @@ LeftHeaderText({fixture}) ->
   "Input"
 
 LeftMenu({fixture}) ->
-  <Menu secondary inverted>
-    <Menu.Item icon="file code" active onClick={-> return} />
-    <Menu.Item icon="setting" onClick={-> return} />
-  </Menu>
+  <Observe pure source={fixture.ui.getLeftTab}>{(leftTab) ->
+    <Menu secondary inverted>
+      <Menu.Item
+        icon="file code"
+        active={leftTab == 'i'}
+        onClick={-> fixture.ui.setLeftTab('i')} />
+      <Menu.Item
+        icon="setting"
+        active={leftTab == 's'}
+        onClick={-> fixture.ui.setLeftTab('s')} />
+    </Menu>
+  }</Observe>
+
+LeftTab({fixture}) ->
+  <Observe pure source={fixture.ui.getLeftTab}>{(leftTab) ->
+    match leftTab:
+      | 'i': <CodeInput fixture={fixture} />
+      | 's': <SettingsInput fixture={fixture} />
+      | else: null
+  }</Observe>
 
 RightSide({fixture, index}) ->
   <Observe pure source={fixture.errors$}>{(errs) ->
@@ -50,7 +72,7 @@ RightSide({fixture, index}) ->
           </div>
         </HeaderText>
       </Header>
-      <Container color='black' background={bgColor}>
+      <Container background={bgColor}>
         <Observe pure source={fixture.output$}>{(compiled) ->
           code = if compiled?.code:
             compiled.code
@@ -83,8 +105,8 @@ export default Gadget({fixture, index}) ->
           </div>
         </HeaderText>
       </Header>
-      <Container color='white' background='#25282c'>
-        <CodeInput fixture={fixture} />
+      <Container background='#25282c'>
+        <LeftTab fixture={fixture} />
       </Container>
     </div>
     <RightSide fixture={fixture} index={index} />

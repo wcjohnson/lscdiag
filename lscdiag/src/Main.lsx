@@ -3,9 +3,7 @@
 import React from "react"
 import {
   Image
-  List
   Menu
-  Segment
   Icon
   Button
   Message
@@ -72,9 +70,6 @@ Content = compose(
 
 TopMenu = compose(
   pure
-  withConstHandlers({
-    reset: -> resetAppState()
-  })
 )(TopMenu(props) ->
   <div className="App-menubar">
     <Menu inverted>
@@ -84,7 +79,7 @@ TopMenu = compose(
       </Menu.Item>
 
       <Menu.Menu position='right'>
-        <Menu.Item as='a'><Icon name='fast backward'/> Reset</Menu.Item>
+        <Menu.Item as='a' onClick={resetAppState}><Icon name='fast backward'/> Reset</Menu.Item>
         <Menu.Item as='a' onClick={onClickPermalink}><Icon name='chain'/> Permalink</Menu.Item>
       </Menu.Menu>
     </Menu>

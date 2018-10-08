@@ -31,7 +31,8 @@
   margin: 0;
   padding: 0.1px 0px 20px 0px;
   border-radius: 0;
-  overflow: none;
+  max-height: 640px;
+  overflow: auto;
 }
 
 .Gadget .Left .Container::-webkit-scrollbar-thumb {
