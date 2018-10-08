@@ -1,14 +1,14 @@
 import url from 'url'
 import React, { Component } from 'react'
+import './semantic.min.css'
 import './App.css'
-import 'react-mdl/extra/material.css'
-import 'react-mdl/extra/material.js'
 import Main from './Main'
 
 import {
   BrowserRouter as Router
   Route
 } from 'react-router-dom'
+import ReactBreakpoints, {withBreakpoints} from 'react-breakpoints'
 
 // ensure state initializes before we try to render.
 // eslint-disable-next-line no-unused-vars
@@ -21,8 +21,37 @@ let path = url.parse(publicUrl).pathname
 if path != '/' and path.endsWith('/'):
   now path = path.substr(0, path.length - 1)
 
+// Router
+BaseRouter() ->
+  <Router basename={path}>
+    <Route exact path="/" component={Main}/>
+  </Router>
+
+// Responsivity
+breakpoints = {
+  mobile: 512
+  nonMobile: 513
+}
+
+BreakpointStateInjector = withBreakpoints(
+  class BreakpointStateInjector extends React.PureComponent:
+    constructor(props) ->
+      super(props)
+      this.update(props)
+
+    componentDidUpdate() ->
+      this.update(this.props)
+
+    update(props): void ->
+      { currentBreakpoint } = props
+      //state.setMobile(currentBreakpoint == 'mobile')
+
+    render() ->
+      <BaseRouter />
+)
+
 export default class App extends Component:
   render() ->
-    return <Router basename={path}>
-      <Route exact path="/" component={Main}/>
-    </Router>
+    <ReactBreakpoints breakpoints={breakpoints}>
+      <BreakpointStateInjector />
+    </ReactBreakpoints>

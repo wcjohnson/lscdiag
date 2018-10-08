@@ -1,5 +1,4 @@
 import React from 'react'
-import createMarker from '../utils/createMarker'
 
 // HACK: can't load Ace during ssr
 let AceEditor = -> null
@@ -7,22 +6,33 @@ if typeof window != 'undefined' and window:
   now AceEditor = require('./AceEditor').default
   require('brace')
   require('brace/mode/jsx')
-  require('../utils/braceLscMode')
-  require('brace/theme/chrome')
+  require('./AceLscHighlighting')
+  require('brace/theme/tomorrow')
+  require('brace/theme/tomorrow_night')
 
-export CodeEditor({code, syntax, readOnly, numLines, markers, name, onChange}) ->
+export default Editor({
+  code, syntax = 'lsc', readOnly, numLines
+  markers, name, onChange, theme='dark'
+  className, maxLines
+}) ->
   if not code: now code = ''
+  realTheme = match theme:
+    | 'dark': 'tomorrow_night'
+    | 'light': 'tomorrow'
+    | else: 'tomorrow_night'
 
   now numLines = Math.max(numLines or code.split("\n").length or 1, 5)
+  now maxLines = maxLines or numLines
 
   <AceEditor
+    className={className}
     mode={syntax}
-    theme="chrome"
+    theme={realTheme}
     value={code}
     height='100%'
     width='100%'
     minLines={numLines}
-    maxLines={numLines}
+    maxLines={maxLines}
     tabSize={2}
     readOnly={readOnly}
     name={name}
@@ -30,9 +40,7 @@ export CodeEditor({code, syntax, readOnly, numLines, markers, name, onChange}) -
     highlightActiveLine
     onChange={onChange}
     style={{
-      fontSize: 12
+      fontSize: 16
       fontFamily: '"Fira Code", Monaco, Menlo, monospace'
     }}
   />
-
-export { createMarker }

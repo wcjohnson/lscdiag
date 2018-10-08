@@ -1,14 +1,14 @@
 import { ReduxComponent, action, selector } from 'redux-components'
-{ assign } = Object
+import { cleanInput } from './cleanState'
 
-initialState = { lsc: '' }
+initialState = cleanInput
 
 export default class Source extends ReduxComponent:
   static verbs = ['SET']
 
   reducer(state = initialState, action) ->
     match action.type:
-      | this.SET: ({}~assign(state, { lsc: action.payload }))
+      | this.SET: action.payload
       | else: state
 
   @action({isDispatcher: true})
@@ -18,5 +18,8 @@ export default class Source extends ReduxComponent:
   @selector({isObservable: true})
   get(state) -> state
 
+  @action({isDispatcher: true})
+  setCode(code) -> { type: this.SET, payload: {code}}
+
   @selector({isObservable: true})
-  code(state) -> state.lsc
+  code(state) -> state?.code

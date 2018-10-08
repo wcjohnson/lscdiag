@@ -25,7 +25,7 @@ makeCaller() ->
         { descriptor: previousDescriptor, result }
     catch err:
       console.error("ToolchainError", err)
-      { result: { toolchainError: err } }
+      { result: { error: err } }
 
 toolchain$(obs) ->
   callTool = makeCaller()
@@ -36,24 +36,27 @@ toolchain$(obs) ->
   ~switchLatest!
 
 export default toolchainCompiled$(fixture) ->
+  let memoizedDescriptor = null
   combineLatest([
     fixture.config.get~map(x ->
       console.log("pushing config to toolchain:", x)
       x
     )
-    fixture.source.code~map(x -> { code: x })
+    fixture.input.get
   ])
   ~toolchain$()
   ~map! ({ descriptor, result }) ->
     // Feed the toolchain descriptor back to the fixture
-    if descriptor:
+    if descriptor and descriptor != memoizedDescriptor:
+      now memoizedDescriptor = descriptor
       fixture.toolchainDescriptor$.next(descriptor)
-    // If an error has a loc, create an error marker
-    if result.error and result.error.loc:
-      fixture.errorMarkers$.next([
-        createMarker('hlt_error', result.error.loc)
-      ])
+
+    // Broadcast errors on separate observable
+    if result.error:
+      marker = if result.error.loc: createMarker('hlt_error', result.error.loc)
+      fixture.errors$.next([{error: result.error, marker}])
     else:
-      fixture.errorMarkers$.next(null)
+      fixture.errors$.next(null)
+
     result
   ~toBehaviorSubject()

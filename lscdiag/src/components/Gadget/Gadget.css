@@ -1,0 +1,48 @@
+.Gadget.Root {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+  padding: 0.5em;
+}
+
+.Gadget .Left {
+  overflow: hidden;
+  border-radius: .28571429rem 0px 0px .28571429rem;
+  flex: 0 0 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.Gadget .Right {
+  overflow: hidden;
+  border-radius: 0px .28571429rem .28571429rem 0px;
+  flex: 0 0 50%;
+}
+
+.Gadget .Header {
+  padding: 0px 10px;
+  flex: 0;
+}
+
+.Gadget .Container {
+  width: 100%;
+  flex: 1;
+  margin: 0;
+  padding: 0.1px 0px 20px 0px;
+  border-radius: 0;
+  overflow: none;
+}
+
+.Gadget .Left .Container::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.25);
+  transition: color .2s ease;
+}
+
+.Gadget .HeaderText {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 3;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}

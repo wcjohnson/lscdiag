@@ -2,10 +2,10 @@
 import { ReduxComponent, action, selector } from 'redux-components'
 { assign } = Object
 
-initialState = { tabs: [0, 0], selectedNode: null }
+initialState = { tabs: ['i', 'o'] }
 
 export default class UI extends ReduxComponent:
-  static verbs = ['SET_LEFT_TAB', 'SET_RIGHT_TAB', 'SET_SELECTED_NODE']
+  static verbs = ['SET_LEFT_TAB', 'SET_RIGHT_TAB']
 
   reducer(state = initialState, action) ->
     match action.type:
@@ -13,8 +13,6 @@ export default class UI extends ReduxComponent:
         {}~assign(state, { tabs: [action.payload, state.tabs[1]] })
       | this.SET_RIGHT_TAB:
         {}~assign(state, { tabs: [state.tabs[0], action.payload] })
-      | this.SET_SELECTED_NODE:
-        {}~assign(state, { selectedNode: action.payload })
       | else:
         state
 
@@ -24,14 +22,8 @@ export default class UI extends ReduxComponent:
   @action({isDispatcher: true})
   setRightTab(value) -> ({type: this.SET_RIGHT_TAB, payload: value})
 
-  @action({isDispatcher: true})
-  setSelectedNode(value) -> ({type: this.SET_SELECTED_NODE, payload: value})
-
   @selector({isObservable: true})
   getLeftTab(state) -> state.tabs[0]
 
   @selector({isObservable: true})
   getRightTab(state) -> state.tabs[1]
-
-  @selector({isObservable: true})
-  getSelectedNode(state) -> state.selectedNode

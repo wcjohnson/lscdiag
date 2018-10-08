@@ -4,15 +4,14 @@ import { createBehaviorSubject } from '@ormojo/fobs'
 import replacePath from '../utils/replacePath'
 import { simplifyConfig } from '@lightscript/compiler-platform'
 
-import Source from './Source'
+import Input from './Input'
 import UI from './UI'
 import Config from './Config'
-import toolchainCompiled$ from './toolchain$'
-import parsed$ from './parsed$'
+import toolchainOutput$ from './toolchain$'
 import markers$ from './markers$'
 
 Fixture = withSubtree(-> ({
-  source: Source
+  input: Input
   ui: UI
   config: Config
 }))(class extends ReduxComponent:
@@ -26,8 +25,9 @@ Fixture = withSubtree(-> ({
   componentWillMount() ->
     // Construct observables corresponding to this fixture.
     this.toolchainDescriptor$ = createBehaviorSubject()
-    this.compiled$ = toolchainCompiled$(this)
-    this.parsed$ = parsed$(this) // XXX
+    this.errors$ = createBehaviorSubject()
+    this.output$ = toolchainOutput$(this)
+    //this.parsed$ = parsed$(this) // XXX
     Object.assign(this, markers$(this))
 
   setConfigAtPath(path, value): void ->
@@ -43,11 +43,14 @@ Fixture = withSubtree(-> ({
 Fixtures = ComponentList(-> Fixture)
 export fixtures = new Fixtures()
 
-export addFixture() ->
+export addFixture(): void ->
   fixtures.push(true)
 
-export duplicateFixture(fixture) ->
+export duplicateFixture(fixture): void ->
   fixtures.push(true)
   fixtures.get(fixtures.length - 1).replaceState(fixture.state)
+
+export deleteFixtureAtIndex(index): void ->
+  fixtures.splice(index, 1)
 
 export default Fixture

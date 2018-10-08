@@ -1,0 +1,91 @@
+import React from 'react'
+import Editor from '../Editor'
+import { Observe, ObserveMany } from '@ormojo/react-observe'
+import { Menu } from 'semantic-ui-react'
+import './Gadget.css'
+import { deleteFixtureAtIndex, duplicateFixture } from '../../state/Fixture'
+
+Header({background, children}) ->
+  <div className="Header" style={{background}}>
+    {children}
+  </div>
+
+HeaderText({color, children}) ->
+  <div className="HeaderText" style={{color}}>
+    {children}
+  </div>
+
+Container({background, color, children}) ->
+  <div className="Container" style={{background, color, children}}>
+    {children}
+  </div>
+
+LeftHeaderText({fixture}) ->
+  "Input"
+
+LeftMenu({fixture}) ->
+  <Menu secondary inverted>
+    <Menu.Item icon="file code" active onClick={-> return} />
+    <Menu.Item icon="setting" onClick={-> return} />
+  </Menu>
+
+RightSide({fixture, index}) ->
+  <Observe pure source={fixture.errors$}>{(errs) ->
+    hasError = if errs?[0]: true else: false
+    bgColor = if hasError: "rgb(255,100,100)" else: "#f6f6f6"
+    fgColor = if hasError: "#ffffff" else: "rgb(109,109,109)"
+    <div className="Right" style={{background: bgColor}}>
+      <Header background={bgColor}>
+        <HeaderText color={fgColor}>
+          { if hasError: "Error" else: "Output" }
+          <div style={{float: 'right'}}>
+            <Menu secondary inverted={hasError}>
+              <Menu.Item icon="file code" active onClick={-> return} />
+              <Menu.Item icon="play" disabled={hasError} onClick={-> return} />
+              <Menu.Item icon="copy" onClick={-> duplicateFixture(fixture) } />
+              {if index > 0:
+                <Menu.Item icon="close" onClick={-> deleteFixtureAtIndex(index)} />
+              }
+            </Menu>
+          </div>
+        </HeaderText>
+      </Header>
+      <Container color='black' background={bgColor}>
+        <Observe pure source={fixture.output$}>{(compiled) ->
+          code = if compiled?.code:
+            compiled.code
+          elif compiled?.error:
+            compiled.error.message
+          else:
+            ''
+          <Editor className="Code" maxLines={30} code={code} readOnly theme="light" />
+        }</Observe>
+      </Container>
+    </div>
+  }</Observe>
+
+CodeInput({fixture}) ->
+  <ObserveMany pure input={fixture.input.get} errs={fixture.errors$}>{
+    ({input, errs}) ->
+      code = if input?.code: input.code else: ''
+      markers = if errs?[0]?.marker: [errs[0].marker] else: []
+      <Editor className="Code" maxLines={30} code={code} onChange={fixture.input.setCode} markers={markers} />
+  }</ObserveMany>
+
+export default Gadget({fixture, index}) ->
+  <div className="Gadget Root">
+    <div className="Left">
+      <Header background="#25282c">
+        <HeaderText color="#999">
+          <LeftHeaderText fixture={fixture} />
+          <div style={{float: 'right'}}>
+            <LeftMenu fixture={fixture} />
+          </div>
+        </HeaderText>
+      </Header>
+      <Container color='white' background='#25282c'>
+        <CodeInput fixture={fixture} />
+      </Container>
+    </div>
+    <RightSide fixture={fixture} index={index} />
+  </div>

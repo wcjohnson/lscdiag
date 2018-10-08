@@ -1,54 +1,38 @@
-.App {
-  text-align: center;
+.App-container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  margin: 0px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  min-width: 0;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.App-container .top {
+  flex-shrink: 0;
 }
 
-.App-intro {
-  font-size: large;
+.App-container .bottom {
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
-a {
-  text-decoration: none;
-  color: #999;
+.App-menubar {
+  padding: 0.5em;
 }
 
-a.active {
-  color: #a34;
+.App-pad {
+  padding: 0.5em;
 }
 
 .hlt_error {
   position: absolute;
-  background-color: #F00;
+  background-color: rgb(143, 0, 0);
 }
 
 .hlt_active {
   position: absolute;
   background-color: #0D5;
-}
-
-.nodekey {
-  color: #aaa;
-}
-
-li.active {
-  background-color: #0D5;
-}
-
-.ReactModal__Overlay {
-  background-color: rgba(0, 0, 0, 0.5) !important;
-  z-index: 5000;
-}
-
-.applyFont {
-  font-family: "Fira Sans","Helvetica Neue","Helvetica","Arial","sans-serif";
-}
-
-.spaceRight {
-  margin-right: 0.2em
 }

@@ -1,3 +1,20 @@
+
+export cleanInput = {
+  code: ''
+}
+
+export cleanConfig = {
+  source: { type: 'toolchain' }
+  options: {
+    children: [{
+      source: {
+        type: 'remote'
+        url: 'https://wcjohnson.github.io/lightscript-compiler/modules/registry.js'
+      }
+    }]
+  }
+}
+
 // A clean slate app state
 export cleanState = {
   fixtures: {
@@ -6,27 +23,14 @@ export cleanState = {
         cj3v2yrkf00003k657l7ap3vt: true
       }
       cj3v2yrkf00003k657l7ap3vt: {
-        source: {
-          lsc: ''
-        }
+        input: cleanInput
         ui: {
           tabs: [
-            0
-            0
+            'i'
+            'o'
           ]
-          selectedNode: null
         }
-        config: {
-          source: { type: 'toolchain' }
-          options: {
-            children: [{
-              source: {
-                type: 'remote'
-                url: 'https://wcjohnson.github.io/lightscript-compiler/modules/registry.js'
-              }
-            }]
-          }
-        }
+        config: cleanConfig
       }
     }
     list: [

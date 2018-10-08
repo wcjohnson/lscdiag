@@ -1,41 +1,99 @@
 'use @oigroup/lightscript'
 
 import React from "react"
-import Modal from "react-modal"
-import { Layout, Header, Content, Navigation } from "react-mdl/lib/Layout"
-import { Grid, Cell } from "react-mdl/lib/Grid"
+import {
+  Image
+  List
+  Menu
+  Segment
+  Icon
+  Button
+  Message
+} from 'semantic-ui-react'
 
 import compose from 'recompose/compose'
 import pure from 'recompose/pure'
-import withState from 'recompose/withState'
 import withPropsOnChange from 'recompose/withPropsOnChange'
-import withPropsFromObservables from 'hawks/lib/withPropsFromObservables'
 import withConstHandlers from 'hawks/lib/withConstHandlers'
+import { Observe } from '@ormojo/react-observe'
 
 import { fixtures, addFixture } from './state/Fixture'
-import { resolvePermalink } from './state/permalink'
+import { resolvePermalink, copyLinkToHere } from './state/permalink'
 import { resetAppState } from './state/reset'
+import { messages$, clearMessage, sendMessage } from './state/messages'
 
-import CodePanel from './components/CodePanel'
-import OutputPanel from './components/OutputPanel'
-import Permalink from './components/Permalink'
+import Gadget from './components/Gadget'
 
 import querystring from 'querystring'
 
 import lscLogo from './images/lsclogo.svg'
 
-colorized = {
-  color: '#455861'
-  borderWidth: 0
-  backgroundColor: "rgba(1,1,1,0)"
-}
+onClickPermalink() ->
+  link = copyLinkToHere()
+  sendMessage({
+    color: 'green'
+    uniqueTag: 'permalink'
+    header: 'Copied link to clipboard'
+    content: <div>
+      <p><a style={{wordWrap: 'break-word'}} href={link}>{link}</a></p>
+      <p><strong>{link.length} characters copied.</strong></p>
+    </div>
+  })
 
-Main = compose(
+Content = compose(
   pure
-  withState('dialogOpen', 'setDialogOpen', false)
-  withPropsFromObservables( -> ({
-    fixtures: fixtures.toArray
-  }))
+)(Content(props) ->
+  <React.Fragment>
+    <Observe pure source={messages$}>{({messages}) ->
+      if messages.length > 0:
+        <div className="App-pad">{
+          [...for idx i, elem message in messages:
+            [<Message color={message.color or 'black'} key={i} onDismiss={-> clearMessage(message)}
+              header={message.header or 'Message'}
+              content={message.content or 'Unknown'}
+            />]
+          ]
+        }</div>
+      else:
+        null
+    }</Observe>
+    <Observe source={fixtures.toArray}>{(fixtures) ->
+      [...for idx i, elem fixture in fixtures:
+        [<Gadget key={i} fixture={fixture} index={i} />]
+      ]
+    }</Observe>
+    <div className="App-menubar">
+      <Button fluid onClick={addFixture}>
+        <Icon name="plus" /> New Fixture
+      </Button>
+    </div>
+  </React.Fragment>
+)
+
+TopMenu = compose(
+  pure
+  withConstHandlers({
+    reset: -> resetAppState()
+  })
+)(TopMenu(props) ->
+  <div className="App-menubar">
+    <Menu inverted>
+      <Menu.Item header>
+        <Image size='mini' src={lscLogo} style={{ marginRight: '1.5em' }} />
+        LightScript
+      </Menu.Item>
+
+      <Menu.Menu position='right'>
+        <Menu.Item as='a'><Icon name='fast backward'/> Reset</Menu.Item>
+        <Menu.Item as='a' onClick={onClickPermalink}><Icon name='chain'/> Permalink</Menu.Item>
+      </Menu.Menu>
+    </Menu>
+  </div>
+)
+
+// Basic app layout
+Main = compose(
+  // Resolve permalinks
   withPropsOnChange(['location'], (props) ->
     loc = props.location
     if loc.search:
@@ -44,50 +102,15 @@ Main = compose(
         resolvePermalink(props.history, parsed.v, parsed.s)
     {}
   )
-  withConstHandlers({
-    addFixture: -> addFixture()
-    reset: -> resetAppState()
-    openDialog: (props) -> props.setDialogOpen(true)
-    closeDialog: (props) -> props.setDialogOpen(false)
-  })
-)(Main(props) ->
-  stuff = []
-  for idx i, elem fixture in props.fixtures:
-    stuff.push(<Cell key={`${i}.1`} col={6}><CodePanel fixture={fixture}/></Cell>)
-    stuff.push(<Cell key={`${i}.2`} col={6}><OutputPanel fixture={fixture}/></Cell>)
-
-  <Layout fixedHeader>
-    <Header
-      style={{backgroundColor: '#DAF3FF', color: '#455861'}}
-      title={
-        <span className="applyFont">
-          <img src={lscLogo} width="35" style={{marginRight: '0.75em', position: 'relative', bottom: 2}} alt='' />
-          lscdiag
-        </span>
-      }
-    >
-      <Navigation>
-        <button style={colorized} onClick={props.reset}>
-          <i className="material-icons spaceRight">layers_clear</i>
-          Reset
-        </button>
-        <button style={colorized} onClick={props.addFixture}>
-          <i className="material-icons spaceRight">add</i>
-          Add Fixture
-        </button>
-        <button style={colorized} onClick={props.openDialog}>
-          <i className="material-icons spaceRight">link</i>
-          Permalink
-        </button>
-      </Navigation>
-    </Header>
-    <Content>
-      <Grid>{stuff}</Grid>
-      <Modal isOpen={props.dialogOpen} onRequestClose={props.closeDialog} contentLabel="permalink">
-        <Permalink onClose={props.closeDialog} />
-      </Modal>
-    </Content>
-  </Layout>
+)(Main() ->
+  <div className="App-container">
+    <div className="top">
+      <TopMenu />
+    </div>
+    <div className="bottom">
+      <Content />
+    </div>
+  </div>
 )
 
 export default Main

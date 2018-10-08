@@ -1,7 +1,7 @@
 // Compilation configuration state
 import { ReduxComponent, action, selector } from 'redux-components'
-
-initialState = { }
+import { cleanConfig } from './cleanState'
+initialState = cleanConfig
 
 export default class Config extends ReduxComponent:
   static verbs = ['SET']

@@ -1,0 +1,18 @@
+import { createBehaviorSubject } from '@ormojo/fobs'
+
+let messages = []
+
+export messages$ = createBehaviorSubject()
+messages$.next({messages})
+
+export clearMessage(m) ->
+  now messages = messages.filter(x -> x != m)
+  messages$.next({messages})
+
+export sendMessage(m) ->
+  if m.uniqueTag:
+    now messages = messages.filter(x -> x.uniqueTag != m.uniqueTag)
+  if m.timeout > 0:
+    setTimeout(-> clearMessage(m), m.timeout)
+  messages.push(m)
+  messages$.next({messages})

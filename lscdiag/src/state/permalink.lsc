@@ -2,16 +2,19 @@ import base64url from 'base64-url'
 // import msgpack5 from 'msgpack5'
 import pako from 'pako'
 import url from 'url'
+import tree from '.'
 import { replaceAppState } from './reset'
+import copy from 'copy-to-clipboard'
+import { sendMessage } from './messages'
 
 // msgpack = msgpack5()
 
 export createPermalink(state, origUrl) ->
   packed = JSON.stringify(state)
   // packed = msgpack.encode(state)
-  console.log("permalinking to state", packed, " uncompressed length (bytes) ", packed.length)
   deflated = pako.deflate(packed, { to: 'string', level: 9 })
   stateArg = base64url.encode(deflated)
+  console.log("permalinking to state", packed, " uncompressed length (bytes) ", packed.length, " compressed length (bytes)", deflated.length, " urlencoded length (bytes)", stateArg.length)
 
   parsed = url.parse(origUrl)
   delete parsed.search
@@ -23,6 +26,11 @@ export createPermalink(state, origUrl) ->
   newUrl = url.format(parsed)
 
   newUrl
+
+export copyLinkToHere() ->
+  link = createPermalink(tree.get(), document.location.href) or ''
+  copy(link)
+  link
 
 resolveVersion = {
   '1': (compressed) ->
