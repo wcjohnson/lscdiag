@@ -25,7 +25,7 @@ makeCaller() ->
         { descriptor: previousDescriptor, result }
     catch err:
       console.error("ToolchainError", err)
-      { result: { error: err } }
+      { descriptor: previousDescriptor, result: { error: err } }
 
 toolchain$(obs) ->
   callTool = makeCaller()

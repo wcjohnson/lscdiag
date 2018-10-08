@@ -2,7 +2,7 @@
 // Display configuration for a CompilerPlatform tool
 import React from 'react'
 
-import { Segment, Checkbox, Dropdown, Header, Button } from 'semantic-ui-react'
+import { Segment, Checkbox, Dropdown, Header } from 'semantic-ui-react'
 
 class OptionCheck extends React.Component:
   onChange(ev, {checked}) =>

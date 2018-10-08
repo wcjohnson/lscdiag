@@ -51,6 +51,16 @@ LeftTab({fixture}) ->
       | else: null
   }</Observe>
 
+RightMenu({hasError, fixture, index}) ->
+  <Menu secondary inverted={hasError}>
+    <Menu.Item icon="file code" active onClick={-> return} />
+    <Menu.Item icon="play" disabled={hasError} onClick={-> return} />
+    <Menu.Item icon="copy" onClick={-> duplicateFixture(fixture) } />
+    {if index > 0:
+      <Menu.Item icon="close" onClick={-> deleteFixtureAtIndex(index)} />
+    }
+  </Menu>
+
 RightSide({fixture, index}) ->
   <Observe pure source={fixture.errors$}>{(errs) ->
     hasError = if errs?[0]: true else: false
@@ -61,25 +71,20 @@ RightSide({fixture, index}) ->
         <HeaderText color={fgColor}>
           { if hasError: "Error" else: "Output" }
           <div style={{float: 'right'}}>
-            <Menu secondary inverted={hasError}>
-              <Menu.Item icon="file code" active onClick={-> return} />
-              <Menu.Item icon="play" disabled={hasError} onClick={-> return} />
-              <Menu.Item icon="copy" onClick={-> duplicateFixture(fixture) } />
-              {if index > 0:
-                <Menu.Item icon="close" onClick={-> deleteFixtureAtIndex(index)} />
-              }
-            </Menu>
+            <RightMenu hasError={hasError} fixture={fixture} index={index} />
           </div>
         </HeaderText>
       </Header>
       <Container background={bgColor}>
         <Observe pure source={fixture.output$}>{(compiled) ->
-          code = if compiled?.code:
+          code = if compiled?.code~looseNotEq(null):
             compiled.code
+          elif compiled?.ast:
+            JSON.stringify(compiled.ast, null, 2)
           elif compiled?.error:
             compiled.error.message
           else:
-            ''
+            '(output contains no code)'
           <Editor className="Code" maxLines={30} code={code} readOnly theme="light" />
         }</Observe>
       </Container>
