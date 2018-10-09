@@ -29,7 +29,7 @@ Fixture = withSubtree(-> ({
 
   setConfigAtPath(path, value): void =>
     cur = simplifyConfig(this.toolchainDescriptor$.getValue())
-    next = replacePath(cur, path, value)
+    next = replacePath(cur, path, simplifyConfig(value))
     this.config.set(next)
 
   @action({isDispatcher: true})
