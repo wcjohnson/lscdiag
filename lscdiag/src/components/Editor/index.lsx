@@ -39,6 +39,7 @@ export default Editor({
     markers={markers}
     highlightActiveLine
     onChange={onChange}
+    wrapEnabled
     style={{
       fontSize: 16
       fontFamily: '"Fira Code", Monaco, Menlo, monospace'
