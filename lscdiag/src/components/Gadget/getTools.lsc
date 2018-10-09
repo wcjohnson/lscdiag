@@ -1,0 +1,34 @@
+import { getTools as baseGetTools } from '@lightscript/compiler-platform'
+
+export getTools() ->
+  list = baseGetTools()
+  list.push(
+    {
+      displayName: "LightScript toolchain"
+      spec: {
+        source: {
+          type: 'remote'
+          url: 'https://wcjohnson.github.io/lightscript-compiler/modules/registry.js'
+        }
+      }
+    }
+    {
+      displayName: "Babel 6 compiler platform"
+      spec: {
+        source: {
+          type: 'remote'
+          url: 'https://wcjohnson.github.io/lightscript-compiler/modules/platform/babel-6.min.js'
+        }
+      }
+    }
+    {
+      displayName: "Babel 7 compiler platform"
+      spec: {
+        source: {
+          type: 'remote'
+          url: 'https://wcjohnson.github.io/lightscript-compiler/modules/platform/babel-7.min.js'
+        }
+      }
+    }
+  )
+  list

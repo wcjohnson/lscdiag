@@ -1,8 +1,10 @@
 /* eslint-disable react/require-render-return */
 // Display configuration for a CompilerPlatform tool
 import React from 'react'
+import { Segment, Checkbox, Dropdown, Header, Input, Button } from 'semantic-ui-react'
 
-import { Segment, Checkbox, Dropdown, Header } from 'semantic-ui-react'
+import replacePath from '../../utils/replacePath'
+import { getTools } from './getTools'
 
 class OptionCheck extends React.Component:
   onChange(ev, {checked}) =>
@@ -63,37 +65,137 @@ class OptionSelector extends React.Component:
       }
     </div>
 
+class OptionString extends React.Component:
+  onChange(ev, {value}) =>
+    this.props.setter(this.props.path, value)
+
+  render() ->
+    let {toolKey, optionDescription: { name, defaultValue, description }, optionValue: value } = this.props
+    now name = name or toolKey
+    now value = if value~looseEq(null): defaultValue else: value
+
+    <div>
+      <div>
+        <span style={{fontSize: '16px', lineHeight: '24px', fontWeight: 'bold', marginRight: '10px'}}>
+          {name}
+        </span>
+      </div>
+      { if description:
+        <div>{description}</div>
+      }
+      <Input fluid onChange={this.onChange} value={value} />
+    </div>
+
 ToolOption(props) ->
   match props.optionDescription?.valueType:
     | "option", "options":
       <OptionSelector {...props} />
     | "boolean":
       <OptionCheck {...props} />
+    | "string":
+      <OptionString {...props} />
+    | "json":
+      <OptionString {...props} json />
     | else:
       null
 
+// Portion of the tool spec dealing with children/adding children
+addChildTool(descriptor, path, setter, tool): void ->
+  children = descriptor.options.children.slice()
+  children.push(tool)
+  setter(path.concat(['options', 'children']), children)
+
+removeChildTool(path, setter, children, index): void ->
+  now children = children.slice()
+  children.splice(index, 1)
+  setter(path.concat(['options', 'children']), children)
+
+toolList = getTools()
+AddToolDropdown({descriptor, path, setter}) ->
+  <Dropdown button fluid text='Add Tool'>
+    <Dropdown.Menu>
+      {...for idx i, elem tool in toolList:
+        spec = tool.spec
+        adder = -> addChildTool(descriptor, path, setter, spec)
+        <Dropdown.Item key={i} onClick={adder}>{tool.displayName}</Dropdown.Item>
+      }
+    </Dropdown.Menu>
+  </Dropdown>
+
+Toolchain({descriptor, metadata, path, setter}) ->
+  isMutable = metadata.possibleOptions?.children?.mutable
+  children = descriptor.options.children
+
+  <React.Fragment>
+    {...for idx i, elem e in descriptor.options.children:
+      removable = if isMutable: -> removeChildTool(path, setter, children, i)
+      <Tool path={path.concat(['options', 'children', i])} key={i} descriptor={e} setter={setter} removable={removable} />
+    }
+    {if isMutable:
+      <AddToolDropdown descriptor={descriptor} path={path} setter={setter} />
+    }
+  </React.Fragment>
+
+ToolConfigUI({descriptor, path, setter, removable}) ->
+  now path = path or []
+  options = descriptor?.options or {}
+  metadata = descriptor?._metadata or {}
+
+  <React.Fragment>
+    <Header size='medium' as='h1'>
+      {metadata.name or '(unknown)'}
+      {if removable:
+        <div style={{float: 'right'}}>
+          <Button onClick={removable}>Remove</Button>
+        </div>
+      }
+    </Header>
+    {...for key k, val v in metadata.possibleOptions or {}:
+      <ToolOption path={path.concat(['options', k])} key={k} toolKey={k} optionDescription={v} optionValue={options[k]} setter={setter} />
+    }
+    { if metadata.hasChildren:
+      <Toolchain path={path} descriptor={descriptor} setter={setter} metadata={metadata} />
+    }
+  </React.Fragment>
+
+export class ProxyTool extends React.PureComponent:
+  constructor(props) ->
+    super(props)
+    { descriptor } = props
+    this.state = { options: Object.assign({}, descriptor.options), changed: false }
+
+  setter(path, value): void =>
+    nextState = replacePath(this.state, path, value)
+    nextState.changed = true
+    this.setState(nextState)
+
+  commit(): void =>
+    { setter, path } = this.props
+    this.setState({changed: false})
+    setter(path.concat("options"), this.state.options)
+
+  render() ->
+    { descriptor, removable } = this.props
+    nextDescriptor = Object.assign({}, descriptor)
+    nextDescriptor.options = this.state.options
+
+    <React.Fragment>
+      <ToolConfigUI descriptor={nextDescriptor} path={[]} setter={this.setter} removable={removable} />
+      {if this.state.changed:
+        <Button primary onClick={this.commit}>Commit Changes</Button>
+      }
+    </React.Fragment>
+
+
 export class Tool extends React.PureComponent:
   render() ->
-    let { descriptor, path, setter } = this.props
-    now path = path or []
-    options = descriptor?.options or {}
-    metadata = descriptor?._metadata or {}
+    let { descriptor, path, setter, removable } = this.props
 
-    <Segment>
-      <Header size='medium' as='h1'>
-        {metadata.name or '(unknown)'}
-      </Header>
-      {...for key k, val v in metadata.possibleOptions or {}:
-        <ToolOption path={path.concat(['options', k])} key={k} toolKey={k} optionDescription={v} optionValue={options[k]} setter={setter} />
-      }
-      { if metadata.hasChildren:
-        <React.Fragment>
-          {...for idx i, elem e in descriptor.options.children:
-            <Tool path={path.concat(['options', 'children', i])} key={i} descriptor={e} setter={setter} />
-          }
-          {if metadata.possibleOptions?.children?.mutable:
-            <Dropdown button fluid text="Add Tool" options={[]} />
-          }
-        </React.Fragment>
-      }
-    </Segment>
+    isProxy = descriptor?._metadata?.ui?.noLiveUpdates
+
+    <Segment>{
+      if isProxy:
+        <ProxyTool descriptor={descriptor} path={path} setter={setter} removable={removable} />
+      else:
+        <ToolConfigUI descriptor={descriptor} path={path} setter={setter} removable={removable} />
+    }</Segment>
