@@ -38,10 +38,7 @@ toolchain$(obs) ->
 export default toolchainCompiled$(fixture) ->
   let memoizedDescriptor = null
   combineLatest([
-    fixture.config.get~map(x ->
-      console.log("pushing config to toolchain:", x)
-      x
-    )
+    fixture.config.get
     fixture.input.get
   ])
   ~toolchain$()
