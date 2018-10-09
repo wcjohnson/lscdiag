@@ -29,8 +29,8 @@ onClickPermalink() ->
   link = copyLinkToHere()
   sendMessage({
     color: 'green'
-    uniqueTag: 'permalink'
-    header: 'Copied link to clipboard'
+    uniqueTag: 'clipboard'
+    header: 'Copied permalink to clipboard'
     content: <div>
       <p><a style={{wordWrap: 'break-word'}} href={link}>{link}</a></p>
       <p><strong>{link.length} characters copied.</strong></p>

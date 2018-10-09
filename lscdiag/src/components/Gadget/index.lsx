@@ -2,8 +2,10 @@ import React from 'react'
 import Editor from '../Editor'
 import { Observe, ObserveMany } from '@ormojo/react-observe'
 import { Menu } from 'semantic-ui-react'
+import copy from 'copy-to-clipboard'
 import './Gadget.css'
 import { deleteFixtureAtIndex, duplicateFixture } from '../../state/Fixture'
+import { sendMessage } from '../../state/messages'
 import { Tool } from './ToolConfig'
 
 SettingsInput({fixture}) ->
@@ -51,10 +53,33 @@ LeftTab({fixture}) ->
       | else: null
   }</Observe>
 
+fixtureOutputToText(compiled) ->
+  if compiled?.code~looseNotEq(null):
+    compiled.code
+  elif compiled?.ast:
+    JSON.stringify(compiled.ast, null, 2)
+  elif compiled?.error:
+    compiled.error.message
+  else:
+    '(output contains no code)'
+
+copyOutputToClipboard(fixture): void ->
+  txt = fixtureOutputToText(fixture.output$.getValue())
+  copy(txt)
+  sendMessage({
+    color: 'green'
+    uniqueTag: 'clipboard'
+    header: 'Copied output to clipboard'
+    content: <div>
+      <p><strong>{txt.length} characters copied.</strong></p>
+    </div>
+  })
+
 RightMenu({hasError, fixture, index}) ->
   <Menu secondary inverted={hasError}>
     <Menu.Item icon="file code" active onClick={-> return} />
     <Menu.Item icon="play" disabled={hasError} onClick={-> return} />
+    <Menu.Item icon="clipboard" disabled={hasError} onClick={-> copyOutputToClipboard(fixture)} />
     <Menu.Item icon="copy" onClick={-> duplicateFixture(fixture) } />
     {if index > 0:
       <Menu.Item icon="close" onClick={-> deleteFixtureAtIndex(index)} />
@@ -76,15 +101,8 @@ RightSide({fixture, index}) ->
         </HeaderText>
       </Header>
       <Container background={bgColor}>
-        <Observe pure source={fixture.output$}>{(compiled) ->
-          code = if compiled?.code~looseNotEq(null):
-            compiled.code
-          elif compiled?.ast:
-            JSON.stringify(compiled.ast, null, 2)
-          elif compiled?.error:
-            compiled.error.message
-          else:
-            '(output contains no code)'
+        <Observe pure source={fixture.output$}>{(output) ->
+          code = output~fixtureOutputToText()
           <Editor className="Code" maxLines={30} code={code} readOnly theme="light" />
         }</Observe>
       </Container>
