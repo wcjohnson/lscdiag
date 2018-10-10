@@ -1,0 +1,18 @@
+import { toolchain$ } from './toolchain$'
+import { map, combineLatest, toBehaviorSubject } from '@ormojo/fobs'
+
+// Take compiled fixture output as AST, run it through preset-env
+export toolchainRunnable$(fixture) ->
+  combineLatest([
+    // BABEL CONFIG HERE
+    fixture.output$
+  ])
+  ~toolchain$()
+  ~map! ({result}) ->
+    if result.error:
+      fixture.errors$.next([{error: result.error}])
+    else:
+      fixture.errors$.next(null)
+
+    result
+  ~toBehaviorSubject()

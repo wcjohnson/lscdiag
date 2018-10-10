@@ -369,7 +369,7 @@
     "@babel/helper-replace-supers" "^7.1.0"
     "@babel/plugin-syntax-class-properties" "^7.0.0"
 
-"@babel/plugin-proposal-decorators@^7.1.0", "@babel/plugin-proposal-decorators@^7.1.2":
+"@babel/plugin-proposal-decorators@^7.1.2":
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.1.2.tgz#79829bd75fced6581ec6c7ab1930e8d738e892e7"
   integrity sha512-YooynBO6PmBgHvAd0fl5e5Tq/a0pEC6RqF62ouafme8FzdIVH41Mz/u1dn8fFVm4jzEJ+g/MsOxouwybJPuP8Q==
@@ -1511,21 +1511,7 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@lightscript/babel-preset@4.0.0-alpha.13":
-  version "4.0.0-alpha.13"
-  resolved "https://registry.yarnpkg.com/@lightscript/babel-preset/-/babel-preset-4.0.0-alpha.13.tgz#5930c8e99f37f8520e86dc1e8c5a93327f79fb6d"
-  integrity sha512-8b+OA5hiN+ocwoBWr4poL9/l5WF9imPkML9nBS02u/YuX14XTGMke+szUvMkupKPAOEOzRGcAUAttwG6XQrl/Q==
-  dependencies:
-    "@babel/helper-plugin-utils" "^7.0.0"
-    "@babel/plugin-proposal-class-properties" "^7.1.0"
-    "@babel/plugin-proposal-decorators" "^7.1.0"
-    "@babel/plugin-proposal-object-rest-spread" "^7.0.0"
-    "@babel/plugin-proposal-optional-chaining" "^7.0.0"
-    "@babel/plugin-proposal-throw-expressions" "^7.0.0"
-    "@babel/plugin-transform-flow-strip-types" "^7.0.0"
-    "@lightscript/transform" "4.0.0-alpha.13"
-
-"@lightscript/babel-preset@4.0.0-alpha.18":
+"@lightscript/babel-preset@4.0.0-alpha.18", "@lightscript/babel-preset@^4.0.0-alpha.18":
   version "4.0.0-alpha.18"
   resolved "https://registry.yarnpkg.com/@lightscript/babel-preset/-/babel-preset-4.0.0-alpha.18.tgz#fe5459ecc23a5cc30b509a68d429bb13738a0bb7"
   integrity sha512-+ZsRFFTFVZewcf0NGV270qqp8GkOlJmrqVZfvoJQ0sx1ztoyCfH/VCMCzmXtysu0nnt5SAAZ4TLYjbOqalMASw==
@@ -1540,7 +1526,7 @@
     "@babel/plugin-transform-flow-strip-types" "^7.0.0"
     "@lightscript/transform" "4.0.0-alpha.18"
 
-"@lightscript/eslint-plugin@4.0.0-alpha.18":
+"@lightscript/eslint-plugin@4.0.0-alpha.18", "@lightscript/eslint-plugin@^4.0.0-alpha.18":
   version "4.0.0-alpha.18"
   resolved "https://registry.yarnpkg.com/@lightscript/eslint-plugin/-/eslint-plugin-4.0.0-alpha.18.tgz#4aec0508923bdf46d8773fa520551665811be634"
   integrity sha512-ng0z9DfPcsLOgNPD1vUWoirgMrYEja4CLRN0Gy60sPUjXIyTjzFLKe3aDQKkxLeHrT7XYE+/7wsv6ReVo76AnQ==
@@ -1548,20 +1534,6 @@
     "@babel/code-frame" "^7.0.0"
     eslint-scope "^4.0.0"
     eslint-visitor-keys "^1.0.0"
-
-"@lightscript/eslint-plugin@^4.0.0-alpha.13":
-  version "4.0.0-alpha.13"
-  resolved "https://registry.yarnpkg.com/@lightscript/eslint-plugin/-/eslint-plugin-4.0.0-alpha.13.tgz#138bbcd6b66d3bb128d284361c157556a7e4737b"
-  integrity sha512-urQeznwdPZbr3MVzAEcgZ2ZAl2RyMkrCtl26KjKY4cwLbwljoHC4NzTs9rINhArAICwvaTyiulpfuAO6Raoibg==
-  dependencies:
-    "@babel/code-frame" "^7.0.0"
-    eslint-scope "^4.0.0"
-    eslint-visitor-keys "^1.0.0"
-
-"@lightscript/parser@4.0.0-alpha.13":
-  version "4.0.0-alpha.13"
-  resolved "https://registry.yarnpkg.com/@lightscript/parser/-/parser-4.0.0-alpha.13.tgz#4699adaf84404afe38ae7d132c515f9291e454fc"
-  integrity sha512-Ok3YGQ2eWNfFz6xz2m/dF0VLjPGrd1CbpdUde0vCFr2xEyUf/CSTLZ51bxDQmQV0Ou3Q1BPPugsay9mZGUYyfg==
 
 "@lightscript/parser@4.0.0-alpha.18":
   version "4.0.0-alpha.18"
@@ -1574,17 +1546,6 @@
   integrity sha512-u/FQAMuLXtPEy8mLN/Hcuq1Zjf69z5eV1WShXAI0tMl9WwotfmTElB5MpnCUx5c57mj543WCqAeMHDqCElfK3Q==
   dependencies:
     core-js "^2.0.0"
-
-"@lightscript/transform@4.0.0-alpha.13":
-  version "4.0.0-alpha.13"
-  resolved "https://registry.yarnpkg.com/@lightscript/transform/-/transform-4.0.0-alpha.13.tgz#c4612f9c778d5809c22ad29bec61fb445d8b7d76"
-  integrity sha512-ULDOI5TNNhcld+PloUGbz9hgCBx6VSUcdI6xUcbAZ9TpjNzBZ8XhvuKWDrT5JmO2gVv6a/yTUWYwWfOqa5PTAg==
-  dependencies:
-    "@babel/types" "^7.0.0"
-    "@lightscript/parser" "4.0.0-alpha.13"
-    "@oigroup/lightscript-runtime" "^0.1.1"
-    ast-loc-utils "^1.1.0"
-    find-babel-config "^1.1.0"
 
 "@lightscript/transform@4.0.0-alpha.18":
   version "4.0.0-alpha.18"
@@ -9715,6 +9676,11 @@ react-router@^4.3.1:
     path-to-regexp "^1.7.0"
     prop-types "^15.6.1"
     warning "^4.0.1"
+
+react-runkit@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/react-runkit/-/react-runkit-0.9.0.tgz#8a97aec60c2fcf9da17b0af2bb91a877e4336b05"
+  integrity sha1-ipeuxgwvz52hewryu5God+QzawU=
 
 react@^16.5.2:
   version "16.5.2"

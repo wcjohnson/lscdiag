@@ -27,7 +27,7 @@ makeCaller() ->
       console.error("ToolchainError", err)
       { descriptor: previousDescriptor, result: { error: err } }
 
-toolchain$(obs) ->
+export toolchain$(obs) ->
   callTool = makeCaller()
 
   obs

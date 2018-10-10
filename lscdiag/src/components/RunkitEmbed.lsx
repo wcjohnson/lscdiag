@@ -1,0 +1,30 @@
+/* eslint react/require-render-return: 0 */
+// XXX: broken rule
+
+import React from 'react'
+import Runkit from 'react-runkit'
+
+class RunkitEmbed extends React.PureComponent {
+  updateNotebook = debounce(() => {
+    // Component may have been unmounted
+    if not this.notebook: return
+
+    this.notebook.evaluate()
+  }, {wait: 800})
+
+  componentDidUpdate() {
+    if (!this.props.source) return
+    this.updateNotebook()
+  }
+
+  componentWillUnmount() {
+    this.notebook = null
+  }
+
+  render() ->
+    <Runkit source={this.props.source} ref={(el) => this.notebook = el} />
+
+}
+
+
+export default RunkitEmbed
