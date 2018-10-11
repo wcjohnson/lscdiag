@@ -8,6 +8,7 @@ import Input from './Input'
 import UI from './UI'
 import Config from './Config'
 import toolchainOutput$ from './toolchain$'
+import toolchainRunnable$ from './runnable$'
 
 Fixture = withSubtree(-> ({
   input: Input
@@ -26,6 +27,7 @@ Fixture = withSubtree(-> ({
     this.toolchainDescriptor$ = createBehaviorSubject()
     this.errors$ = createBehaviorSubject()
     this.output$ = toolchainOutput$(this)
+    this.runnable$ = toolchainRunnable$(this)
 
   setConfigAtPath(path, value): void =>
     cur = simplifyConfig(this.toolchainDescriptor$.getValue())

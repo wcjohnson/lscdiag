@@ -141,6 +141,9 @@ ToolConfigUI({descriptor, path, setter, removable}) ->
   options = descriptor?.options or {}
   metadata = descriptor?._metadata or {}
 
+  console.log("TCUI.render", path)
+  console.log("TCUI.metadata", metadata)
+
   <React.Fragment>
     <Header size='medium' as='h1'>
       {metadata.name or '(unknown)'}
@@ -162,7 +165,15 @@ export class ProxyTool extends React.PureComponent:
   constructor(props) ->
     super(props)
     { descriptor } = props
-    this.state = { options: Object.assign({}, descriptor.options), changed: false }
+    this.state = { currentDescriptor: descriptor, options: Object.assign({}, descriptor.options), changed: false }
+
+  // Authoritative updates from upstream should cause us to rerender
+  componentDidUpdate() ->
+    if this.props.descriptor != this.state.currentDescriptor:
+      this.setState({
+        currentDescriptor: this.props.descriptor
+        options: Object.assign({}, this.props.descriptor.options)
+      })
 
   setter(path, value): void =>
     nextState = replacePath(this.state, path, value)

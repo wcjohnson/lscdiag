@@ -1,0 +1,16 @@
+import React from 'react'
+
+export Header({background, children}) ->
+  <div className="Header" style={{background}}>
+    {children}
+  </div>
+
+export HeaderText({color, children}) ->
+  <div className="HeaderText" style={{color}}>
+    {children}
+  </div>
+
+export Container({background, color, children}) ->
+  <div className="Container" style={{background, color, children}}>
+    {children}
+  </div>

@@ -1,32 +1,18 @@
 import React from 'react'
-import Editor from '../Editor'
 import { Observe, ObserveMany } from '@ormojo/react-observe'
 import { Menu } from 'semantic-ui-react'
-import copy from 'copy-to-clipboard'
+
+import Editor from '../Editor'
 import './Gadget.css'
-import { deleteFixtureAtIndex, duplicateFixture } from '../../state/Fixture'
-import { sendMessage } from '../../state/messages'
 import { Tool } from './ToolConfig'
+import { Output } from './Output'
+import { Header, HeaderText, Container } from './Layout'
 
 SettingsInput({fixture}) ->
   <Observe pure source={fixture.toolchainDescriptor$}>{(config) ->
+    console.log("SettingsInput.render", config)
     <Tool descriptor={config} setter={fixture.setConfigAtPath} />
   }</Observe>
-
-Header({background, children}) ->
-  <div className="Header" style={{background}}>
-    {children}
-  </div>
-
-HeaderText({color, children}) ->
-  <div className="HeaderText" style={{color}}>
-    {children}
-  </div>
-
-Container({background, color, children}) ->
-  <div className="Container" style={{background, color, children}}>
-    {children}
-  </div>
 
 LeftHeaderText({fixture}) ->
   "Input"
@@ -53,62 +39,6 @@ LeftTab({fixture}) ->
       | else: null
   }</Observe>
 
-fixtureOutputToText(compiled) ->
-  if compiled?.code~looseNotEq(null):
-    compiled.code
-  elif compiled?.ast:
-    JSON.stringify(compiled.ast, null, 2)
-  elif compiled?.error:
-    compiled.error.message
-  else:
-    '(output contains no code)'
-
-copyOutputToClipboard(fixture): void ->
-  txt = fixtureOutputToText(fixture.output$.getValue())
-  copy(txt)
-  sendMessage({
-    color: 'green'
-    uniqueTag: 'clipboard'
-    header: 'Copied output to clipboard'
-    content: <div>
-      <p><strong>{txt.length} characters copied.</strong></p>
-    </div>
-  })
-
-RightMenu({hasError, fixture, index}) ->
-  <Menu secondary inverted={hasError}>
-    <Menu.Item icon="file code" active onClick={-> return} />
-    <Menu.Item icon="play" disabled={hasError} onClick={-> return} />
-    <Menu.Item icon="clipboard" disabled={hasError} onClick={-> copyOutputToClipboard(fixture)} />
-    <Menu.Item icon="copy" onClick={-> duplicateFixture(fixture) } />
-    {if index > 0:
-      <Menu.Item icon="close" onClick={-> deleteFixtureAtIndex(index)} />
-    }
-  </Menu>
-
-RightSide({fixture, index}) ->
-  <Observe pure source={fixture.errors$}>{(errs) ->
-    hasError = if errs?[0]: true else: false
-    bgColor = if hasError: "rgb(255,100,100)" else: "#f6f6f6"
-    fgColor = if hasError: "#ffffff" else: "rgb(109,109,109)"
-    <div className="Right" style={{background: bgColor}}>
-      <Header background={bgColor}>
-        <HeaderText color={fgColor}>
-          { if hasError: "Error" else: "Output" }
-          <div style={{float: 'right'}}>
-            <RightMenu hasError={hasError} fixture={fixture} index={index} />
-          </div>
-        </HeaderText>
-      </Header>
-      <Container background={bgColor}>
-        <Observe pure source={fixture.output$}>{(output) ->
-          code = output~fixtureOutputToText()
-          <Editor className="Code" maxLines={30} code={code} readOnly theme="light" />
-        }</Observe>
-      </Container>
-    </div>
-  }</Observe>
-
 CodeInput({fixture}) ->
   <ObserveMany pure input={fixture.input.get} errs={fixture.errors$}>{
     ({input, errs}) ->
@@ -132,5 +62,5 @@ export default Gadget({fixture, index}) ->
         <LeftTab fixture={fixture} />
       </Container>
     </div>
-    <RightSide fixture={fixture} index={index} />
+    <Output fixture={fixture} index={index} />
   </div>

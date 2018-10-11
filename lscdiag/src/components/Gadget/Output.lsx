@@ -1,0 +1,124 @@
+import React from 'react'
+import { Menu } from 'semantic-ui-react'
+import { Observe, ObserveMap } from '@ormojo/react-observe'
+import { combineLatest, map } from '@ormojo/fobs'
+import Runkit from 'react-runkit'
+
+import { Header, HeaderText, Container } from './Layout'
+import Editor from '../Editor'
+import { deleteFixtureAtIndex, duplicateFixture } from '../../state/Fixture'
+import { sendMessage } from '../../state/messages'
+import copy from 'copy-to-clipboard'
+
+fixtureOutputToText(compiled) ->
+  if compiled?.code~looseNotEq(null):
+    compiled.code
+  elif compiled?.ast:
+    JSON.stringify(compiled.ast, null, 2)
+  elif compiled?.error:
+    compiled.error.message
+  else:
+    '(output contains no code)'
+
+runnableOutputToText(compiled) ->
+  if compiled?.code~looseNotEq(null):
+    let code = compiled.code
+    // Eliminate "use strict"; from the start
+    if code.startsWith('"use strict";\n'):
+      code.slice(14)
+    else:
+      code
+
+copyOutputToClipboard(fixture): void ->
+  txt = fixtureOutputToText(fixture.output$.getValue())
+  copy(txt)
+  sendMessage({
+    color: 'green'
+    uniqueTag: 'clipboard'
+    header: 'Copied output to clipboard'
+    content: <div>
+      <p><strong>{txt.length} characters copied.</strong></p>
+    </div>
+  })
+
+CodeOutput({fixture}) ->
+  <Observe pure source={fixture.output$}>{(output) ->
+    code = output~fixtureOutputToText()
+    <Editor className="Code" maxLines={30} code={code} readOnly theme="light" />
+  }</Observe>
+
+RunnableOutput({fixture}) ->
+  <ObserveMap
+    fixture={fixture}
+    map={({fixture}) ->
+      let lastKnownGood = ''
+      combineLatest([fixture.runnable$, fixture.errors$])
+      ~map(([runnable, errors]) ->
+        if errors:
+          if errors.length > 0:
+            { errorMessage: errors[0].error.message, code: lastKnownGood }
+          else:
+            { code: lastKnownGood }
+        else:
+          now lastKnownGood = runnable~runnableOutputToText()
+          { code: lastKnownGood }
+      )
+    }
+  >{({errorMessage, code}) ->
+    <React.Fragment>
+      { if errorMessage:
+        <Editor className="Code" maxLines={30} code={errorMessage} readOnly theme="light" />
+      }
+      { if code:
+        <Runkit source={code} />
+      }
+    </React.Fragment>
+  }</ObserveMap>
+
+RightTab({fixture}) ->
+  <Observe pure source={fixture.ui.getRightTab}>{(tab) ->
+    match tab:
+      | 'o': <CodeOutput fixture={fixture} />
+      | 'r': <RunnableOutput fixture={fixture} />
+      | else: null
+  }</Observe>
+
+RightMenu({hasError, fixture, index}) ->
+  <Observe source={fixture.ui.getRightTab}>{(rightTab) ->
+    <Menu secondary inverted={hasError}>
+      <Menu.Item
+        icon="file code"
+        active={rightTab == 'o'}
+        onClick={-> fixture.ui.setRightTab('o')} />
+      <Menu.Item
+        icon="play"
+        active={rightTab == 'r'}
+        disabled={hasError}
+        onClick={-> fixture.ui.setRightTab('r')} />
+      <Menu.Item icon="clipboard" disabled={hasError} onClick={-> copyOutputToClipboard(fixture)} />
+      <Menu.Item icon="copy" onClick={-> duplicateFixture(fixture) } />
+      {if index > 0:
+        <Menu.Item icon="close" onClick={-> deleteFixtureAtIndex(index)} />
+      }
+    </Menu>
+  }</Observe>
+
+export Output({fixture, index}) ->
+  <Observe pure source={fixture.errors$}>{(errs) ->
+    hasError = if errs?[0]: true else: false
+    bgColor = if hasError: "rgb(255,100,100)" else: "#f6f6f6"
+    fgColor = if hasError: "#ffffff" else: "rgb(109,109,109)"
+    <div className="Right" style={{background: bgColor}}>
+      <Header background={bgColor}>
+        <HeaderText color={fgColor}>
+          { if hasError: "Error" else: "Output" }
+          <div style={{float: 'right'}}>
+            <RightMenu hasError={hasError} fixture={fixture} index={index} />
+          </div>
+        </HeaderText>
+      </Header>
+      <Container background={bgColor}>
+        <RightTab fixture={fixture} />
+      </Container>
+    </div>
+  }</Observe>

@@ -1,12 +1,44 @@
 import { toolchain$ } from './toolchain$'
-import { map, combineLatest, toBehaviorSubject } from '@ormojo/fobs'
+import { map, combineLatest, toBehaviorSubject, createConstant, filter } from '@ormojo/fobs'
+
+babelConfig = createConstant({
+  source: {
+    type: 'toolchain'
+  },
+  options: {
+    children: [
+      {
+        source: {
+          type: 'remote',
+          url: 'https://wcjohnson.github.io/lightscript-compiler/modules/platform/babel-7.min.js'
+        }
+      },
+      {
+        source: {
+          type: 'remote'
+          url: 'https://wcjohnson.github.io/lightscript-compiler/modules/preset/4.0.0-alpha.20.min.js'
+        }
+        options: {
+          options: JSON.stringify({
+            "_noLscTransform": true
+            env: { targets: { node: 8} }
+          })
+        }
+      }
+    ]
+  }
+})
 
 // Take compiled fixture output as AST, run it through preset-env
-export toolchainRunnable$(fixture) ->
+export default toolchainRunnable$(fixture) ->
   combineLatest([
-    // BABEL CONFIG HERE
+    babelConfig
     fixture.output$
   ])
+  ~filter(x ->
+    maybeError = x[1]?.error
+    maybeError~looseEq(null)
+  )
   ~toolchain$()
   ~map! ({result}) ->
     if result.error:
