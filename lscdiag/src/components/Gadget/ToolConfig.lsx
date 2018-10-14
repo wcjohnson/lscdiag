@@ -141,9 +141,6 @@ ToolConfigUI({descriptor, path, setter, removable}) ->
   options = descriptor?.options or {}
   metadata = descriptor?._metadata or {}
 
-  console.log("TCUI.render", path)
-  console.log("TCUI.metadata", metadata)
-
   <React.Fragment>
     <Header size='medium' as='h1'>
       {metadata.name or '(unknown)'}

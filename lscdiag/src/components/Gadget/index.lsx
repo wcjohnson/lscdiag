@@ -10,7 +10,6 @@ import { Header, HeaderText, Container } from './Layout'
 
 SettingsInput({fixture}) ->
   <Observe pure source={fixture.toolchainDescriptor$}>{(config) ->
-    console.log("SettingsInput.render", config)
     <Tool descriptor={config} setter={fixture.setConfigAtPath} />
   }</Observe>
 

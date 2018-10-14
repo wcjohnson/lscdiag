@@ -4,15 +4,15 @@ import { map, combineLatest, toBehaviorSubject, createConstant, filter } from '@
 babelConfig = createConstant({
   source: {
     type: 'toolchain'
-  },
+  }
   options: {
     children: [
       {
         source: {
-          type: 'remote',
+          type: 'remote'
           url: 'https://wcjohnson.github.io/lightscript-compiler/modules/platform/babel-7.min.js'
         }
-      },
+      }
       {
         source: {
           type: 'remote'
